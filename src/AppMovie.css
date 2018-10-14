@@ -1,0 +1,16 @@
+.row{
+    display: flex;
+    flex-direction: row;
+    margin-right: 1px;
+    margin-left: 1px;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    align-items: center;
+}
+
+.Response {
+    margin: 10px 20px;
+    width: 300px;
+    height: 450px;
+  }
+
