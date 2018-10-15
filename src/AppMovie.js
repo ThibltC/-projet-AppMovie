@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Response from './Response';
 import './AppMovie.css'
 // import SearchBar from './SearchBar';
+import Movie from './Movie'
 
 class AppMovie extends Component {
 
@@ -11,7 +12,9 @@ class AppMovie extends Component {
         result: [],
         titlesAutoComp: [],
         isLoaded: false,
-        title: ''
+        title: '',
+        info: undefined,
+        whenInfoIsfills: false
     }
 
 
@@ -22,7 +25,8 @@ class AppMovie extends Component {
             .then(data => {
                 this.setState({
                     result: data.results,
-                    isLoaded: true
+                    isLoaded: true,
+                    whenInfoIsfills: false,
                 });
             });
     }
@@ -36,32 +40,43 @@ class AppMovie extends Component {
         }
     }
 
-    // getSubmit = () => {
+    getInfo = async (event) => {
+        event.preventDefault()
+        const query = event.target.elements.searchInput.value
+        const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
+        const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${api_key}&language=en-FR&query=${query}&page=1&region=FR&language=fr`)
+        const data = await response.json()
+        this.setState({
+            info: data.results,
+            whenInfoIsfills: true,
+            isLoaded: false
+        });
 
-    // }
+
+    }
 
     legacy = async (title) => {
         await this.setState({ title })
-        this.setState({input: this.state.title})
+        this.setState({ input: this.state.title })
     }
 
 
     render() {
         console.log(`title : ${this.state.title}`)
         console.log(`input : ${this.state.input}`)
-        console.log(this.state.result.map(e=>e.title))
 
 
 
         return (
             <div>
                 {/* <SearchBar legacy={this.legacy} onChange={this.inputChange} /> */}
-                <form autoComplete="off" >
+                <form autoComplete="off" onSubmit={this.getInfo}>
                     <input
                         type="text"
                         placeholder="Ex: Batman"
                         value={this.state.input}
-                        onChange={this.inputChange}>
+                        onChange={this.inputChange}
+                        name='searchInput'>
                     </input>
                     <button>Search</button>
                 </form>
@@ -72,7 +87,7 @@ class AppMovie extends Component {
                             .map((element, i) =>
                                 <Response
                                     resultKey={element.poster_path}
-                                    title={this.state.result[i].title}
+                                    title={this.state.result[i].original_title}
                                     key={`list-${i}`}
                                     name={this.legacy}
                                 />
@@ -81,6 +96,19 @@ class AppMovie extends Component {
                     </div>
 
                 }
+                {this.state.whenInfoIsfills &&
+                    <div className="row">
+                        {this.state.info.length &&
+                            <div className="searchInfo">
+                                <Movie info={this.state.info} />
+                            </div>
+                        }
+
+                    </div>
+
+                }
+
+
             </div>
         )
     }
