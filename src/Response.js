@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Animated } from "react-animated-css";
+import './Response.css'
 
 
 class Response extends Component {
@@ -35,7 +36,7 @@ class Response extends Component {
         return (
             <div className="Response" onClick={e => this.props.name(this.props.title)}>
                 <Animated animationIn="fadeIn" isVisible={true}>
-                    <img src={`https://image.tmdb.org/t/p/w300${this.props.resultKey}`} alt={this.props.title} />
+                    <img src={`https://image.tmdb.org/t/p/w300${this.props.resultKey}`} alt={this.props.title} className='zoom'/>
                 </Animated >
             </div>
         );

@@ -6,11 +6,12 @@
     overflow: scroll;
     scroll-behavior: smooth;
     align-items: center;
+    background-color: black
 }
 
 .Response {
-    margin: 10px 20px;
+    margin: 30px ;
     width: 300px;
-    height: 450px;
+    height: 500px;
   }
 

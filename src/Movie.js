@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Animated } from "react-animated-css";
+import './Movie.css'
 
 
 class Movie extends Component {
