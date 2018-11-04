@@ -1,0 +1,28 @@
+.response{
+    display: flex;
+    flex-direction: row;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    align-items: center;
+    background-color: black
+}
+
+.Response {
+    margin: 30px ;
+    width: 300px;
+    height: 500px;
+}
+
+
+@media screen and (max-width: 480px){ 
+    .response {
+        flex-direction: column;
+    }
+
+}
+@media screen and (max-width: 880px){ 
+    .buttonSearch {
+        display: none
+    }
+}
+
