@@ -1,8 +1,6 @@
-.row{
+.response{
     display: flex;
     flex-direction: row;
-    margin-right: 1px;
-    margin-left: 1px;
     overflow: scroll;
     scroll-behavior: smooth;
     align-items: center;
@@ -13,5 +11,18 @@
     margin: 30px ;
     width: 300px;
     height: 500px;
-  }
+}
+
+
+@media screen and (max-width: 480px){ 
+    .response {
+        flex-direction: column;
+    }
+
+}
+@media screen and (max-width: 880px){ 
+    .buttonSearch {
+        display: none
+    }
+}
 

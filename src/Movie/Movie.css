@@ -1,0 +1,10 @@
+.Movie {
+    color: white
+}
+
+.Movie .casting {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+

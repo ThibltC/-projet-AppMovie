@@ -1,0 +1,15 @@
+.Actor{
+    color: black;
+    transition: transform .2s;
+}
+
+.Actor img {
+    height: 150px;
+    border-radius: 50%;
+}
+
+.Actor:hover {
+    -ms-transform: scale(1.15); /* IE 9 */
+    -webkit-transform: scale(1.15); /* Safari 3-8 */
+    transform: scale(1.15);    
+}
