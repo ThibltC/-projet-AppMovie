@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import ListMovies from './ListMovies/ListMovies';
-import SearchBar from './SearchBar/SearchBar';
+import ListMovies from '../ListMovies/ListMovies';
+import SearchBar from '../SearchBar/SearchBar';
 
 import './Home.css';
 
@@ -45,9 +45,8 @@ class Home extends Component {
         })
     }
 
+
     render() {
-        if (this.state.changeRoute)
-            return <Redirect to={`/movie${this.state.idMovie}`} />
         return (
             <div className='AppMovie'>
                 <p>Accueil</p>
@@ -60,13 +59,12 @@ class Home extends Component {
                         {this.state.result
                             .filter((_, i) => i < 15)
                             .map((element, i) =>
-                                <ListMovies
-                                    resultKey={element.poster_path}
-                                    title={this.state.result[i].original_title}
-                                    id={this.state.result[i].id}
-                                    key={`list-${i}`}
-                                    getIdMovie={this.getIdMovie}
-                                />
+                                <Link to={`/movie${element.id}`} key={`movie-${i}`}>
+                                    <ListMovies
+                                        movieDetails={element}
+                                        getIdMovie={this.getIdMovie}
+                                    />
+                                </Link>
                             )
                         }
                     </div>
