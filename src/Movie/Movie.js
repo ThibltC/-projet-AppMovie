@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import Actor from '../Actor/Actor';
+import ListActors from '../ListActor/ListActor';
 
 import './Movie.css';
 
@@ -12,6 +12,7 @@ class Movie extends Component {
         isLoading: false,
         movieDetails: undefined,
         casting: undefined,
+        idActor: undefined,
     }
 
     componentWillMount = async () => {
@@ -33,6 +34,12 @@ class Movie extends Component {
             })
     }
 
+    getIdActor = (idActor) => {
+        this.setState({
+            idActor: idActor,
+        })
+    }
+
     convertMinToHours = (min) => {
         const h = Math.trunc(min / 60)
         const m = Math.ceil((min / 60 - h) * 60)
@@ -44,7 +51,6 @@ class Movie extends Component {
         if (!this.state.isLoading)
             return <p>LOADING...</p>
         const { movieDetails } = this.state
-        console.log(this.state.movieDetails)
         return (
             this.state.isLoading &&
             <div className="Movie">
@@ -56,8 +62,13 @@ class Movie extends Component {
                     <button>Accueil</button>
                 </Link>
                 <div className='casting'>
-                    {this.state.casting.map(caracDetails =>
-                        <Actor caracDetails={caracDetails} />
+                    {this.state.casting.map((caracDetails, i) =>
+                        <Link to={`/actor${caracDetails.id}`} key={`actor-${i}`}>
+                            <ListActors
+                                caracDetails={caracDetails}
+                                getIdActor={this.getIdActor}
+                            />
+                        </Link>
                     )}
                 </div>
 

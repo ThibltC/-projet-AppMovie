@@ -1,18 +1,14 @@
-.Actor{
+.ListActor{
     color: black;
     transition: transform .2s;
 }
-.Actor .filmographie img{
+
+.ListActor img {
     height: 150px;
+    border-radius: 50%;
 }
 
-.Actor .filmographie {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap
-}
-
-.Actor .filmographie img:hover {
+.ListActor:hover {
     -ms-transform: scale(1.15); /* IE 9 */
     -webkit-transform: scale(1.15); /* Safari 3-8 */
     transform: scale(1.15);    

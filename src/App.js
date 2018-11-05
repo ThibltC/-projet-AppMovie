@@ -18,7 +18,7 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={Home}/>
           <Route exact path='/movie:id(\d+)' component={Movie}/>
-          {/* <Route exact path='/actor:id(\d+)' component={Actor}/> */}
+          <Route exact path='/actor:id(\d+)' component={Actor}/>
         </Switch>
       </div>
 
