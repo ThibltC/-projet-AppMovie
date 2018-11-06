@@ -47,7 +47,9 @@ class Actor extends Component {
             <div className='Actor'>
                 <img src={`https://image.tmdb.org/t/p/w300${this.state.actorDetails.profile_path}`} alt="poster_path" />
                 <p>Nom : {this.state.actorDetails.name}</p>
-                <p>Anniversaire : {this.state.actorDetails.birthday}</p>    
+                {this.state.actorDetails.birthday &&
+                    <p>Anniversaire : {this.state.actorDetails.birthday.split('-').reverse().join('-')}</p>
+                }
                 <Link to='/'>
                     <button>Accueil</button>
                 </Link>
