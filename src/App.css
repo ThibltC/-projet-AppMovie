@@ -1,13 +1,4 @@
-@keyframes Header-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .App {
-  background: rgb(195, 190, 228);
-  height: 100vh;
+  background: #282c34;
+  min-height: 100vh;
 }

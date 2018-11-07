@@ -15,6 +15,7 @@ class Home extends Component {
         isLoaded: false,
         idMovie: undefined,
         changeRoute: false,
+        randomMoviePoster: undefined,
     }
 
     changeInput = async (event) => {
@@ -48,8 +49,7 @@ class Home extends Component {
 
     render() {
         return (
-            <div className='AppMovie'>
-                <p>Accueil</p>
+            <div className='Home' >
                 <SearchBar
                     inputSearchMovie={this.state.inputSearchMovie}
                     changeInput={this.changeInput}

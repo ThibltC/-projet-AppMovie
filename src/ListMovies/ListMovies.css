@@ -1,11 +1,14 @@
-.zoom {
+.ListMovies img {
     padding: 10px;
     transition: transform .2s;
     border: 1px white solid;
     box-shadow: 5px 5px 10px rgb(252, 238, 238);
+    object-fit: cover;
+    height: 450px;
+    width: 300px;
 }
 
-.zoom:hover {
+.ListMovies img:hover {
     -ms-transform: scale(1.15); /* IE 9 */
     -webkit-transform: scale(1.15); /* Safari 3-8 */
     transform: scale(1.15); 
