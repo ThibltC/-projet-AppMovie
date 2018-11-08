@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 import ListMovies from '../ListMovies/ListMovies';
 import SearchBar from '../SearchBar/SearchBar';
+import Header from '../Header/Header';
+import Search from '../Search';
 
 import './Home.css';
 
@@ -50,6 +52,8 @@ class Home extends Component {
     render() {
         return (
             <div className='Home' >
+            <Search />
+                <Header />
                 <SearchBar
                     inputSearchMovie={this.state.inputSearchMovie}
                     changeInput={this.changeInput}
