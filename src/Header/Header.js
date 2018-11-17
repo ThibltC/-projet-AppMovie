@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './Header.css';
+import { Link } from 'react-router-dom';
 
 
 class Header extends Component {
 
-    state={
-        randomMoviePoster:undefined,
-        imageLoaded: false
+    state = {
+        randomMovie: undefined,
+        imageLoaded: false,
     }
 
     componentWillMount = async () => {
@@ -16,22 +17,26 @@ class Header extends Component {
             .then(response => response.json())
             .then(data => {
                 this.setState({
-                    randomMoviePoster: data.results[Math.floor(Math.random() * 20)],
+                    randomMovie: data.results[Math.floor(Math.random() * 20)],
                     imageLoaded: true
                 });
             });
     }
 
     render() {
+        const {randomMovie} = this.state
         return (
             <header className="Header">
                 <img src={logo} className="Header-logo" alt="logo" />
                 <p>App Movies</p>
                 {this.state.imageLoaded &&
-                    <div className='randomHeaderStyle'>
-                        <div className='filtreImage'></div>
-                        <img src={`https://image.tmdb.org/t/p/original${this.state.randomMoviePoster.backdrop_path}`} alt={this.state.randomMoviePoster.title} />
-                    </div>}
+                    <Link to={`/movie${randomMovie.id}`} >
+                        <div className='randomHeaderStyle'>
+                            <div className='filtreImage'></div>
+                            <img src={`https://image.tmdb.org/t/p/original${randomMovie.backdrop_path}`} alt={randomMovie.title} />
+                        </div>
+                    </Link>
+                }
             </header>
         )
     }

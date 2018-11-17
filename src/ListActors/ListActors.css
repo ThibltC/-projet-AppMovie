@@ -1,16 +1,16 @@
-.ListActor{
+.ListActors{
     color: black;
     transition: transform .2s;
 }
 
-.ListActor img {
+.ListActors img {
     height: 150px;
     width: 150px;   
     object-fit: cover;
     border-radius: 50%;
 }
 
-.ListActor:hover {
+.ListActors:hover {
     -ms-transform: scale(1.15); /* IE 9 */
     -webkit-transform: scale(1.15); /* Safari 3-8 */
     transform: scale(1.15);    
