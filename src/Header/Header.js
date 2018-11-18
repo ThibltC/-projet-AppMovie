@@ -11,9 +11,9 @@ class Header extends Component {
         imageLoaded: false,
     }
 
-    componentWillMount = async () => {
+    componentWillMount = () => {
         const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
-        await fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${api_key}&language=fr-FR&page=1&region=Fr`)
+        fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${api_key}&language=fr-FR&page=1&region=Fr`)
             .then(response => response.json())
             .then(data => {
                 this.setState({

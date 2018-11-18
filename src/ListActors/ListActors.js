@@ -12,7 +12,7 @@ class ListActors extends Component {
                     :
                     <img src={'https://cdn.browshot.com/static/images/not-found.png'} alt={this.props.caracDetails.name} />
                 }
-                <p>{this.props.caracDetails.name}</p>
+                <h3>{this.props.caracDetails.name}</h3>
             </div>
         )
     }
