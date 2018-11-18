@@ -8,7 +8,7 @@ class SearchBar extends Component {
             <form autoComplete='off' className='SearchBar'>
                 <input
                     type='text'
-                    placeholder={`Entrer le nom d'un film`}
+                    placeholder={`Entrer un film`}
                     value={this.props.inputSearch}
                     onChange={e => this.props.changeInput(e)}
                 />
