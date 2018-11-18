@@ -1,17 +1,27 @@
-.ListActor{
+.ListActors{
     color: black;
     transition: transform .2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.ListActor img {
+.ListActors img {
     height: 150px;
     width: 150px;   
     object-fit: cover;
     border-radius: 50%;
+    margin: 1vw;
 }
 
-.ListActor:hover {
+.ListActors:hover {
     -ms-transform: scale(1.15); /* IE 9 */
     -webkit-transform: scale(1.15); /* Safari 3-8 */
     transform: scale(1.15);    
+}
+
+.ListActors h3{
+    color:white;
+    text-decoration-line: none;
 }

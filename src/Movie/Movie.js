@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import ListActors from '../ListActor/ListActor';
+import ListActors from '../ListActors/ListActors';
 
 import './Movie.css';
 
@@ -49,17 +49,20 @@ class Movie extends Component {
 
     render() {
         if (!this.state.isLoading)
-            return <p>LOADING...</p>
+            return <div className="loading">
+                Loading...
+            </div>
         const { movieDetails } = this.state
         return (
             this.state.isLoading &&
             <div className="Movie">
+                <h1>{movieDetails.title}</h1>
                 <img src={`https://image.tmdb.org/t/p/w300${movieDetails.poster_path}`} alt="poster_path" />
                 <p>Date de sortie : {movieDetails.release_date}</p>
-                <p>Title : {movieDetails.title}</p>
+
                 <p>Durée : {this.convertMinToHours(movieDetails.runtime)}</p>
                 <Link to='/'>
-                    <button>Accueil</button>
+                    <button className='buttonHome'>Accueil</button>
                 </Link>
                 <div className='casting'>
                     {this.state.casting.map((caracDetails, i) =>

@@ -9,7 +9,7 @@
     animation: Header-logo-spin infinite 20s linear;
     height: 90px;
     z-index: 15;
-    align-self: center
+    align-self: center;
 }
 
 .Header-logo:hover{
@@ -19,8 +19,9 @@
 .Header p{
     z-index: 15;
     font-size: 53px;
-    color: white;
-    align-self: center
+    color: rgb(247, 245, 245);
+    align-self: center;
+    text-shadow: 5px 5px 10px rgb(22, 22, 22);
 }
 
 .Header .randomHeaderStyle .filtreImage{
@@ -61,8 +62,6 @@
         height: 43vw;
         width: 100vw;
     }
-
-
 } 
 
 @keyframes Header-logo-spin {

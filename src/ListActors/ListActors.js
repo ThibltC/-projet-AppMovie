@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 
-import './ListActor.css'
+import './ListActors.css'
 
-class ListActor extends Component {
+class ListActors extends Component {
 
     render() {
         return (
-            <div className='ListActor' onClick={_ => this.props.getIdActor(this.props.caracDetails.id)}>
+            <div className='ListActors' onClick={_ => this.props.getIdActor(this.props.caracDetails.id)}>
                 {this.props.caracDetails.profile_path ?
                     <img src={`https://image.tmdb.org/t/p/w300${this.props.caracDetails.profile_path}`} alt={this.props.caracDetails.name} />
                     :
                     <img src={'https://cdn.browshot.com/static/images/not-found.png'} alt={this.props.caracDetails.name} />
                 }
-                <p>{this.props.caracDetails.name}</p>
+                <h3>{this.props.caracDetails.name}</h3>
             </div>
         )
     }
 }
 
-export default ListActor;
+export default ListActors;
