@@ -5,11 +5,11 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <form autoComplete="off" className='SearchBar'>
+            <form autoComplete='off' className='SearchBar'>
                 <input
-                    type="text"
-                    placeholder="Ex: Batman"
-                    value={this.props.inputSearchMovie}
+                    type='text'
+                    placeholder={`Entrer le nom d'un film`}
+                    value={this.props.inputSearch}
                     onChange={e => this.props.changeInput(e)}
                 />
             </form>

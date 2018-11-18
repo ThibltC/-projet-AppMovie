@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import Actor from '../Actor/Actor';
+import ListActors from '../ListActors/ListActors';
 
 import './Movie.css';
 
@@ -12,6 +12,7 @@ class Movie extends Component {
         isLoading: false,
         movieDetails: undefined,
         casting: undefined,
+        idActor: undefined,
     }
 
     componentWillMount = async () => {
@@ -33,6 +34,12 @@ class Movie extends Component {
             })
     }
 
+    getIdActor = (idActor) => {
+        this.setState({
+            idActor: idActor,
+        })
+    }
+
     convertMinToHours = (min) => {
         const h = Math.trunc(min / 60)
         const m = Math.ceil((min / 60 - h) * 60)
@@ -42,22 +49,29 @@ class Movie extends Component {
 
     render() {
         if (!this.state.isLoading)
-            return <p>LOADING...</p>
+            return <div className="loading">
+                Loading...
+            </div>
         const { movieDetails } = this.state
-        console.log(this.state.movieDetails)
         return (
             this.state.isLoading &&
             <div className="Movie">
+                <h1>{movieDetails.title}</h1>
                 <img src={`https://image.tmdb.org/t/p/w300${movieDetails.poster_path}`} alt="poster_path" />
                 <p>Date de sortie : {movieDetails.release_date}</p>
-                <p>Title : {movieDetails.title}</p>
+
                 <p>Durée : {this.convertMinToHours(movieDetails.runtime)}</p>
                 <Link to='/'>
-                    <button>Accueil</button>
+                    <button className='buttonHome'>Accueil</button>
                 </Link>
                 <div className='casting'>
-                    {this.state.casting.map(caracDetails =>
-                        <Actor caracDetails={caracDetails} />
+                    {this.state.casting.map((caracDetails, i) =>
+                        <Link to={`/actor${caracDetails.id}`} key={`actor-${i}`}>
+                            <ListActors
+                                caracDetails={caracDetails}
+                                getIdActor={this.getIdActor}
+                            />
+                        </Link>
                     )}
                 </div>
 

@@ -1,0 +1,13 @@
+.genre {
+    cursor: pointer;
+    width: 100px;
+    padding: 5px;   
+}
+
+.listGenres {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-items: center
+}
+

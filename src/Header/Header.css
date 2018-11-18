@@ -1,26 +1,75 @@
+.Header{
+    background-color: #282c34;
+    height: 300px;
+    display: flex;
+    position: relative;
+}
+
 .Header-logo{
     animation: Header-logo-spin infinite 20s linear;
     height: 90px;
+    z-index: 15;
+    align-self: center;
 }
-  
+
 .Header-logo:hover{
     animation: Header-logo-spin infinite 2s linear;
 }
-  
-.Header{
-    background-color: #282c34;
-    height: 100px;
-    display: flex;
-    align-items: center;
+
+.Header p{
+    z-index: 15;
     font-size: 53px;
-    color: white;
+    color: rgb(247, 245, 245);
+    align-self: center;
+    text-shadow: 5px 5px 10px rgb(22, 22, 22);
+}
+
+.Header .randomHeaderStyle .filtreImage{
+    position: absolute;
+    background: linear-gradient(to right, #282c34 10%, transparent ),
+                linear-gradient(to top, #282c34 , transparent );
+    height: 300px;
+    width: 700px;
+    z-index: 10;
+    right: 0;
+} 
+
+.Header .randomHeaderStyle img {
+    position: absolute;
+    right: 0;
+    height: 300px;
+    width: 700px;   
+    object-fit: cover;
+    z-index: 5;
 }
 
 @media screen and (max-width: 480px){ 
-    .Header {
+    .Header p{
         font-size: calc(5px + 10vw);
     }
     .Header-logo {
         height: calc(40px + 10vw);
     }
 }
+@media screen and (max-width: 700px){
+    .Header {
+        height: 43vw;
+    }
+    .Header .randomHeaderStyle .filtreImage{
+        height: 43vw;
+    }
+    .Header .randomHeaderStyle img {
+        height: 43vw;
+        width: 100vw;
+    }
+} 
+
+@keyframes Header-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  

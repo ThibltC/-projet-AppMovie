@@ -1,28 +1,49 @@
-.response{
+.displaySearch {
+    text-align: center;
+}
+
+.response {
+    min-height: 350px;
     display: flex;
     flex-direction: row;
-    overflow: scroll;
-    scroll-behavior: smooth;
+    flex-wrap: wrap;
+    justify-content: space-around;
     align-items: center;
-    background-color: black
 }
 
-.Response {
-    margin: 30px ;
-    width: 300px;
-    height: 500px;
-}
+.buttonSearch {   
+    border: 2px solid;
+    font: inherit;
+    padding: 0.6em 1em;
+    margin: 20px;
+    transition: 0.2s;
+    box-shadow: inset 5px 5px 10px rgb(66, 66, 66),
+    inset -5px -5px 10px rgb(66, 66, 66),
+    5px 5px 10px rgb(32, 32, 32);
+    border-radius: 8px
+} 
 
+.buttonSearch:hover,.buttonSearch:active{
+    box-shadow: inset 35px 35px 60px rgb(32, 32, 32),
+    inset -35px -35px 60px rgb(32, 32, 32),
+    1px 1px 10px rgb(32, 32, 32);
+    color: antiquewhite;
+    transform: translate(0px, -3px);
+}
 
 @media screen and (max-width: 480px){ 
     .response {
-        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow: auto;
     }
-
-}
-@media screen and (max-width: 880px){ 
     .buttonSearch {
-        display: none
+        padding: 0.4em 1em;
+    }
+}
+@media screen and (max-width: 374px){ 
+    .response {
+        min-height: 300px;
     }
 }
 
