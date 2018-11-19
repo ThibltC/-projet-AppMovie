@@ -23,7 +23,7 @@
     border-radius: 8px
 } 
 
-.buttonSearch:hover,.buttonSearch:active{
+.buttonSearch:hover,.buttonSearch:focus{
     box-shadow: inset 35px 35px 60px rgb(32, 32, 32),
     inset -35px -35px 60px rgb(32, 32, 32),
     1px 1px 10px rgb(32, 32, 32);
