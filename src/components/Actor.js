@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import ListMovies from '../ListMovies/ListMovies';
+import ListMovies from '../components/ListMovies';
 
 import './Actor.css';
 
