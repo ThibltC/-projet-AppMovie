@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
-import ListMovies from '../ListMovies/ListMovies';
-import SearchBar from '../SearchBar/SearchBar';
-import Header from '../Header/Header';
+import ListMovies from './ListMovies';
+import SearchBar from './SearchBar';
+import Header from './Header';
 
 import './Home.css';
 
@@ -16,6 +16,7 @@ class Home extends Component {
         isLoaded: false,
         idMovie: undefined,
         randomMoviePoster: undefined,
+        redirect: false
     }
 
     changeInputMovie = async (event) => {
@@ -41,7 +42,12 @@ class Home extends Component {
 
     }
 
-
+    handleSubmit = (e) => {
+        e.preventDefault()
+        this.setState({
+            redirect: true
+        })
+    }
 
     getIdMovie = (idMovie) => {
         this.setState({
@@ -53,18 +59,23 @@ class Home extends Component {
 
 
     render() {
+        if (this.state.redirect) return <Redirect to={`/movie${this.state.resultMovies[0].id}`} />
         return (
             <div className='Home'>
                 <Header />
-                <div className='displaySearch'>
+                
+                <form autoComplete='off' className='displaySearch' onSubmit={this.handleSubmit}>
+                
+                
                     <SearchBar
                         inputSearch={this.state.inputSearchMovie}
                         changeInput={this.changeInputMovie}
+                        handleSubmit={this.handleSubmit}
                     />
                     <Link to='/search'>
                         <button className='buttonSearch'>Recherche avancée</button>
                     </Link>
-                </div>
+                    </form>
                 {(this.state.isLoaded && this.state.inputSearchMovie.length !== 0) &&
                     <div className="response">
                         {this.state.resultMovies

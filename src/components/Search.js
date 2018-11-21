@@ -1,32 +1,39 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import ListMovies from '../ListMovies/ListMovies';
+import ListMovies from './ListMovies';
+
+import genres from './genres';
 
 import './Search.css'
 
 class Search extends Component {
 
     state = {
-        genres: [],
+        genres,
+        idsGenreSelected: [],
+        namesGenreSelected: [],
+        isPluriel: 's',
+
         moviesFound: [],
-        idGenre: '',
+
         runTimeMax: 90,
         idMovie: undefined,
         changeRoute: false,
-        year: 2000,
-        nameGenre: ''
+        yearMin: 1907,
+        yearMax: 2019,
+
 
     }
 
-    componentDidMount = () => {
-        const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
-        fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${api_key}&language=fr-FR`)
-            .then(response => response.json())
-            .then(data => this.setState({
-                genres: data.genres
-            }))
-    }
+    // componentDidMount = () => {
+    //     const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
+    //     fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${api_key}&language=fr-FR`)
+    //         .then(response => response.json())
+    //         .then(data => this.setState({
+    //             genres: data.genres
+    //         }))
+    // }
 
     seachMovies = () => {
         // if (localStorage.getItem('Recherche')) {
@@ -36,9 +43,9 @@ class Search extends Component {
         //         moviesFound: el.results,
         //     })
         // } else {
-        const { runTimeMax, idGenre, year } = this.state
+        const { runTimeMax, idsGenreSelected, yearMin, yearMax } = this.state
         const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
-        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&language=fr-FR&sort_by=vote_count.desc&year=${year}with_genres=${idGenre}&with_runtime.lte=${runTimeMax}`)
+        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&language=fr-FR&sort_by=popularity.desc&primary_release_date.gte=${yearMin}-01-01&primary_release_date.lte=${yearMax}-12-31&with_genres=${idsGenreSelected}&with_runtime.lte=${runTimeMax}`)
             .then(response => response.json())
             .then(data => {
                 // localStorage.setItem('Recherche', JSON.stringify({moviesFound: data.results}))
@@ -49,21 +56,24 @@ class Search extends Component {
         // }
     }
 
-    addIdGenre = (e, id, name) => {
+    addOrRemoveGenre = (e, id, name) => {
         e.preventDefault()
-        if (this.state.idGenre !== '' && !this.state.nameGenre.includes(name)) {
+        const { idsGenreSelected, namesGenreSelected } = this.state
+        let newId = idsGenreSelected
+        let newName = namesGenreSelected
+        if (namesGenreSelected.includes(name)) {
             this.setState({
-                idGenre: `${this.state.idGenre},${id}`,
-                nameGenre: `${this.state.nameGenre}, ${name}`
+                idsGenreSelected: newId.filter(e => e !== id),
+                namesGenreSelected: newName.filter(e => e !== name)
             })
-        } else if (!this.state.nameGenre.includes(name)) {
+        } else {
+            newId.push(id)
+            newName.push(name)
             this.setState({
-                idGenre: id,
-                nameGenre: name
+                idsGenreSelected: newId,
+                namesGenreSelected: newName
             })
         }
-
-
     }
 
     convertMinToHours = (min) => {
@@ -79,21 +89,19 @@ class Search extends Component {
         })
     }
 
-    changeYear = (event) => {
+    changeYearMin = (event) => {
         this.setState({
-            year: event.target.value
+            yearMin: event.target.value
+        })
+    }
+    changeYearMax = (event) => {
+        this.setState({
+            yearMax: event.target.value
         })
     }
 
     refrechState = () => {
-        this.setState({
-            moviesFound: [],
-            idGenre: '',
-            runTimeMax: 90,
-            idMovie: undefined,
-            year: 2000,
-            nameGenre: ''
-        })
+        window.location.reload()
     }
 
     getIdMovie = (idMovie) => {
@@ -104,24 +112,41 @@ class Search extends Component {
 
 
     render() {
-        console.log(this.state.moviesFound)
+        const { yearMax, yearMin, namesGenreSelected, isPluriel } = this.state
+        console.log('ids', this.state.idsGenreSelected, 'names', this.state.namesGenreSelected)
         return (
             <div className='Search' >
 
                 <Link to='/'>
                     <button>Accueil</button>
                 </Link>
+                <h2>Choisissez vos critères</h2>
                 <div className='listGenres'>
                     {this.state.genres.map((e, i) => {
-                        return (<div className='genre' key={e.name} onClick={event => this.addIdGenre(event, e.id, e.name)}>{e.name}</div>)
-
+                        return (
+                            <div className='genre' key={e.name} onClick={event => this.addOrRemoveGenre(event, e.id, e.name)}>
+                                {e.name}
+                            </div>
+                        )
                     })}
                 </div>
+                {namesGenreSelected.length ?
+                    // console.log(namesGenreSelected)
+                    <h3>Vous avez choisi : {namesGenreSelected}</h3>
+                    :
+                    <h3>Pas de genre selectionné</h3>
+                }
                 <input type="range" name="runtime" min="0" max="240" step='10' value={this.state.runTimeMax} onChange={e => this.changeRunTimeMax(e)} />{this.convertMinToHours(this.state.runTimeMax)}
-                <input type="number" name="year" min="1970" max="2020" value={this.state.year} onChange={e => this.changeYear(e)} />
+                <form>
+                    <h3>Films apres :</h3>
+                    <input type="number" name="yearMin" min="1907" max="2019" value={this.state.yearMin} onChange={e => this.changeYearMin(e)} />
+                    <h3>Films avant :</h3>
+                    <input type="number" name="yearMax" min="1907" max="2019" value={this.state.yearMax} onChange={e => this.changeYearMax(e)} />
+                </form>
+                <h2>{`Films compris entre ${yearMin} et ${yearMax} de style ${namesGenreSelected} dont la durée ne dépasse pas ${this.convertMinToHours(this.state.runTimeMax)}`}</h2>
                 <button onClick={this.seachMovies}>Chercher</button>
                 <button onClick={this.refrechState}>Effacer tout</button>
-                <h1>{this.state.nameGenre}</h1>
+
                 <div className="response">
                     {this.state.moviesFound
                         .filter((_, i) => i < 15)

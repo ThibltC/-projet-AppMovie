@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Home from './Home/Home';
-import Movie from './Movie/Movie';
-import Actor from './Actor/Actor';
-import Search from './Search/Search';
+import Home from './components/Home';
+import Movie from './components/Movie';
+import Actor from './components/Actor';
+import Search from './components/Search';
 
 import './App.css';
 

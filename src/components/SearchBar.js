@@ -5,7 +5,7 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <form autoComplete='off' className='SearchBar'>
+            <form autoComplete='off' className='SearchBar' onSubmit={e => this.props.handleSubmit}>
                 <input
                     type='text'
                     placeholder={`Entrer le nom d'un film`}

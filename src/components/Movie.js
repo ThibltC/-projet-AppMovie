@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import ListActors from '../ListActors/ListActors';
+import ListActors from '../components/ListActors';
 
 import './Movie.css';
 
