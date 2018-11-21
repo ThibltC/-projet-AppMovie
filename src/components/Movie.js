@@ -36,7 +36,7 @@ class Movie extends Component {
 
     getIdActor = (idActor) => {
         this.setState({
-            idActor: idActor,
+            idActor,
         })
     }
 
@@ -46,25 +46,31 @@ class Movie extends Component {
         if (m > 9) return h + 'h' + m
         return h + 'h0' + m
     }
+    algoDeMalade = (b, r) => {
+        if (r - b < 0) return 'Nul'
+        return 'Bien'
+    }
 
     render() {
         if (!this.state.isLoading)
-            return <div className="loading">
-                Loading...
-            </div>
+            return <div className='loading'>Loading...</div>
         const { movieDetails } = this.state
+        console.log(this.state.casting)
         return (
             this.state.isLoading &&
             <div className="Movie">
                 <h1>{movieDetails.title}</h1>
-                <img src={`https://image.tmdb.org/t/p/w300${movieDetails.poster_path}`} alt="poster_path" />
-                <p>Date de sortie : {movieDetails.release_date}</p>
+                <img className='mainImage' src={`https://image.tmdb.org/t/p/w300${movieDetails.poster_path}`} alt="poster_path" />
+                <p>Date de sortie : {movieDetails.release_date.split('-').reverse().join('.')}</p>
 
                 <p>Durée : {this.convertMinToHours(movieDetails.runtime)}</p>
+                <p>Résumé : {movieDetails.overview}</p>
+                <p>{this.algoDeMalade(movieDetails.budget, movieDetails.revenue)}</p>
                 <Link to='/'>
                     <button className='buttonHome'>Accueil</button>
                 </Link>
-                <div className='casting'>
+                <p>Casting :</p>
+                <div className='listResults'>
                     {this.state.casting.map((caracDetails, i) =>
                         <Link to={`/actor${caracDetails.id}`} key={`actor-${i}`}>
                             <ListActors

@@ -117,9 +117,7 @@ class Search extends Component {
         return (
             <div className='Search' >
 
-                <Link to='/'>
-                    <button>Accueil</button>
-                </Link>
+             
                 <h2>Choisissez vos critères</h2>
                 <div className='listGenres'>
                     {this.state.genres.map((e, i) => {
@@ -144,8 +142,11 @@ class Search extends Component {
                     <input type="number" name="yearMax" min="1907" max="2019" value={this.state.yearMax} onChange={e => this.changeYearMax(e)} />
                 </form>
                 <h2>{`Films compris entre ${yearMin} et ${yearMax} de style ${namesGenreSelected} dont la durée ne dépasse pas ${this.convertMinToHours(this.state.runTimeMax)}`}</h2>
-                <button onClick={this.seachMovies}>Chercher</button>
+                <button onClick={this.seachMovies}>Lancer la rechercher</button>
                 <button onClick={this.refrechState}>Effacer tout</button>
+                <Link to='/'>
+                    <button>Retour à l'accueil</button>
+                </Link>
 
                 <div className="response">
                     {this.state.moviesFound

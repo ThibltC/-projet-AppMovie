@@ -41,20 +41,23 @@ class Actor extends Component {
 
 
     render() {
+        console.log(this.state.actorFilmo)
         if (!this.state.isLoading)
-            return <p>Loading...</p>
+            return <div className='loading'>Loading...</div>
         return (
             <div className='Actor'>
-                <img src={`https://image.tmdb.org/t/p/w300${this.state.actorDetails.profile_path}`} alt="poster_path" />
-                <p>Nom : {this.state.actorDetails.name}</p>
+            <h1>{this.state.actorDetails.name}</h1>
+                <img className='mainImage' src={`https://image.tmdb.org/t/p/w300${this.state.actorDetails.profile_path}`} alt="poster_path" />
+                
                 {this.state.actorDetails.birthday &&
-                    <p>Anniversaire : {this.state.actorDetails.birthday.split('-').reverse().join('-')}</p>
+                    <p>Anniversaire : {this.state.actorDetails.birthday.split('-').reverse().join('.')}</p>
                 }
                 <Link to='/'>
                     <button>Accueil</button>
                 </Link>
-                <div className='filmographie'>
+                <div className='listResults filmographie'>
                     {this.state.actorFilmo.cast
+                        .sort((a, b) => b.popularity - a.popularity)
                         .map((element, i) =>
                             <Link to={`/movie${this.state.actorFilmo.cast[i].id}`} key={`movie-${i}`}>
                                 <ListMovies

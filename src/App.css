@@ -2,3 +2,22 @@
   background: #282c34;
   min-height: 100vh;
 }
+
+.loading {
+  color: white;
+  font-size: 50px;
+  height: 100px;
+}
+
+.listResults {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+@media screen and (max-width: 450px){ 
+  .mainImage {
+    height: 110vw;
+  }
+}

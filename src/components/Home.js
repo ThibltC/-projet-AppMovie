@@ -73,7 +73,7 @@ class Home extends Component {
                         handleSubmit={this.handleSubmit}
                     />
                     <Link to='/search'>
-                        <button className='buttonSearch'>Recherche avancée</button>
+                        <button >Recherche avancée</button>
                     </Link>
                     </form>
                 {(this.state.isLoaded && this.state.inputSearchMovie.length !== 0) &&

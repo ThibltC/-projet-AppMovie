@@ -5,14 +5,15 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <form autoComplete='off' className='SearchBar' onSubmit={e => this.props.handleSubmit}>
+            <div className='SearchBar'>
                 <input
                     type='text'
                     placeholder={`Entrer le nom d'un film`}
                     value={this.props.inputSearch}
                     onChange={e => this.props.changeInput(e)}
                 />
-            </form>
+            </div>
+
         )
     }
 }
