@@ -63,10 +63,10 @@ class Home extends Component {
         return (
             <div className='Home'>
                 <Header />
-                
+
                 <form autoComplete='off' className='displaySearch' onSubmit={this.handleSubmit}>
-                
-                
+
+
                     <SearchBar
                         inputSearch={this.state.inputSearchMovie}
                         changeInput={this.changeInputMovie}
@@ -75,10 +75,11 @@ class Home extends Component {
                     <Link to='/search'>
                         <button >Recherche avancée</button>
                     </Link>
-                    </form>
+                </form>
                 {(this.state.isLoaded && this.state.inputSearchMovie.length !== 0) &&
                     <div className="response">
                         {this.state.resultMovies
+                            .sort((a, b) => b.popularity - a.popularity)
                             .filter((_, i) => i < 6)
                             .map((element, i) =>
                                 <Link to={`/movie${element.id}`} key={`movie-${i}`}>
