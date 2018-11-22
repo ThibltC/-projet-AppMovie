@@ -46,7 +46,7 @@ class Actor extends Component {
             return <div className='loading'>Loading...</div>
         return (
             <div className='Actor'>
-            <h1>{this.state.actorDetails.name}</h1>
+            <h2>{this.state.actorDetails.name}</h2>
                 <img className='mainImage' src={`https://image.tmdb.org/t/p/w300${this.state.actorDetails.profile_path}`} alt="poster_path" />
                 
                 {this.state.actorDetails.birthday &&

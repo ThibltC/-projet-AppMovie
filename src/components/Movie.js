@@ -1,18 +1,40 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Slide from '@material-ui/core/Slide';
+import Switch from '@material-ui/core/Switch';
+import { withStyles } from '@material-ui/core/styles';
+import grey from '@material-ui/core/colors/grey';
 
 import ListActors from '../components/ListActors';
 
 import './Movie.css';
 
+const styles = () => ({
+    colorSwitchBase: {
+        color: grey[500],
+        '&$colorChecked': {
+            color: grey[800],
+            '& + $colorBar': {
+                backgroundColor: grey[500],
+            },
+        },
+    },
+    colorBar: {},
+    colorChecked: {},
+})
 
 class Movie extends Component {
+
+
 
     state = {
         isLoading: false,
         movieDetails: undefined,
         casting: undefined,
         idActor: undefined,
+        checkedResume: false,
+        checkedCasting: false,
+
     }
 
     componentWillMount = async () => {
@@ -51,39 +73,72 @@ class Movie extends Component {
         return 'Bien'
     }
 
+    handleChangeResume = () => {
+        this.setState(state => ({ checkedResume: !state.checkedResume, checkedCasting: false }));
+    };
+    handleChangeCasting = () => {
+        this.setState(state => ({ checkedCasting: !state.checkedCasting, checkedResume: false }));
+    };
+
     render() {
-        if (!this.state.isLoading)
-            return <div className='loading'>Loading...</div>
-        const { movieDetails } = this.state
-        console.log(this.state.casting)
+        const { classes } = this.props;
+        const { checkedResume, checkedCasting, movieDetails } = this.state;
+
+        if (!this.state.isLoading) return <div className='loading'>Loading...</div>
+
         return (
             this.state.isLoading &&
             <div className="Movie">
-                <h1>{movieDetails.title}</h1>
+                <h2>{movieDetails.title}</h2>
                 <img className='mainImage' src={`https://image.tmdb.org/t/p/w300${movieDetails.poster_path}`} alt="poster_path" />
-                <p>Date de sortie : {movieDetails.release_date.split('-').reverse().join('.')}</p>
-
-                <p>Durée : {this.convertMinToHours(movieDetails.runtime)}</p>
-                <p>Résumé : {movieDetails.overview}</p>
-                <p>{this.algoDeMalade(movieDetails.budget, movieDetails.revenue)}</p>
-                <Link to='/'>
-                    <button className='buttonHome'>Accueil</button>
-                </Link>
-                <p>Casting :</p>
-                <div className='listResults'>
-                    {this.state.casting.map((caracDetails, i) =>
-                        <Link to={`/actor${caracDetails.id}`} key={`actor-${i}`}>
-                            <ListActors
-                                caracDetails={caracDetails}
-                                getIdActor={this.getIdActor}
-                            />
-                        </Link>
-                    )}
+                <div className='moviesInfos'>
+                    <p>Sorti le {movieDetails.release_date.split('-').reverse().join('.')}</p>
+                    <p>{this.convertMinToHours(movieDetails.runtime)}</p>
                 </div>
 
+                <div className=''>Résumé
+                    <Switch checked={checkedResume}
+                        onChange={this.handleChangeResume}
+                        aria-label="Collapse"
+                        classes={{
+                            switchBase: classes.colorSwitchBase,
+                            checked: classes.colorChecked,
+                            bar: classes.colorBar,
+                        }} />
+                    Casting
+                    <Switch checked={checkedCasting}
+                        onChange={this.handleChangeCasting}
+                        aria-label="Collapse"
+                        classes={{
+                            switchBase: classes.colorSwitchBase,
+                            checked: classes.colorChecked,
+                            bar: classes.colorBar,
+                        }} />
+                    <Link to='/'>
+                        <button className='buttonHome'>Accueil</button>
+                    </Link>
+                </div>
+
+                <Slide direction="up" in={checkedResume} mountOnEnter unmountOnExit>
+                    <div className='resume' >
+                        <p>{movieDetails.overview}</p>
+                    </div>
+                </Slide>
+                <Slide direction="up" in={checkedCasting} mountOnEnter unmountOnExit>
+                    <div className='listResults'>
+                        {this.state.casting.map((caracDetails, i) =>
+                            <Link to={`/actor${caracDetails.id}`} key={`actor-${i}`}>
+                                <ListActors
+                                    caracDetails={caracDetails}
+                                    getIdActor={this.getIdActor}
+                                />
+                            </Link>
+                        )}
+                    </div>
+                </Slide>
             </div>
         );
     }
 }
 
-export default Movie;
+export default withStyles(styles)(Movie);
