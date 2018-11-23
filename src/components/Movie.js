@@ -71,7 +71,7 @@ class Movie extends Component {
         if (m > 9) return h + 'h' + m
         return h + 'h0' + m
     }
- 
+
     handleChangeResume = () => {
         this.setState(state => ({
             checkedResume: !state.checkedResume,
@@ -110,15 +110,17 @@ class Movie extends Component {
                         <p>Sorti le {movieDetails.release_date.split('-').reverse().join('.')}</p>
                         <p>{this.convertMinToHours(movieDetails.runtime)}</p>
                     </div>
-                    <div className='displayButtons'>Résumé
-                    <Switch checked={checkedResume}
+                    <div className='displayButtons'>
+                        <p>Résumé</p>
+                        <Switch checked={checkedResume}
                             onChange={this.handleChangeResume}
                             aria-label="Collapse"
                             classes={{
                                 switchBase: classes.colorSwitchBase,
                                 checked: classes.colorChecked,
                                 bar: classes.colorBar,
-                            }} />
+                            }}
+                        />
                         <Link to='/'>
                             <button className='buttonHome'>Accueil</button>
                         </Link>
