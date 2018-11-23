@@ -22,9 +22,8 @@
 }
 
 .displayButtons {
-    margin : -10px 
+    margin-top: -10px;
 }
-
 .Movie .displayMovie{
     display: flex;
     flex-direction: column;

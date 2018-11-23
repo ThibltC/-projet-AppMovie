@@ -9,7 +9,6 @@ a {
 }
 
 h2 {
-  padding-top: 20px;
   text-shadow: 5px 5px 10px rgb(22, 22, 22);
   font-size: calc(10px + 3vmin);
   text-align: center

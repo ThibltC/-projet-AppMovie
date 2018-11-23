@@ -71,11 +71,7 @@ class Movie extends Component {
         if (m > 9) return h + 'h' + m
         return h + 'h0' + m
     }
-    algoDeMalade = (b, r) => {
-        if (r - b < 0) return 'Nul'
-        return 'Bien'
-    }
-
+ 
     handleChangeResume = () => {
         this.setState(state => ({
             checkedResume: !state.checkedResume,

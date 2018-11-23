@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import ListMovies from './ListMovies';
 
@@ -13,7 +13,6 @@ class Search extends Component {
         genres,
         idsGenreSelected: [],
         namesGenreSelected: [],
-        
 
         moviesFound: [],
 
@@ -22,8 +21,6 @@ class Search extends Component {
         changeRoute: false,
         yearMin: 1907,
         yearMax: 2019,
-
-
     }
 
     seachMovies = () => {
@@ -37,7 +34,6 @@ class Search extends Component {
                     redirect: true
                 })
             })
-
     }
 
     addOrRemoveGenre = (e, id, name) => {
@@ -84,10 +80,6 @@ class Search extends Component {
         })
     }
 
-    refrechState = () => {
-        window.location.reload()
-    }
-
     getIdMovie = (idMovie) => {
         this.setState({
             idMovie,
@@ -97,12 +89,11 @@ class Search extends Component {
 
     render() {
         const { yearMax, yearMin, namesGenreSelected, runTimeMax } = this.state
-
         return (
             <div className='Search' >
                 <h2>Choisissez vos critères</h2>
                 <Link to='/'>
-                    <button>Retour à l'accueil</button>
+                    <button className='backHome'>Retour à l'accueil</button>
                 </Link>
                 <div className='listGenres'>
                     {this.state.genres.map(e => {
@@ -113,19 +104,21 @@ class Search extends Component {
                         )
                     })}
                 </div>
-
-                <input type="range" name="runtime" min="0" max="240" step='1' value={runTimeMax} onChange={e => this.changeRunTimeMax(e)} />{this.convertMinToHours(runTimeMax)}
-                <input type="range" name="yearMin" min="1907" max={yearMax} step='1' value={yearMin} onChange={e => this.changeYearMin(e)} />{yearMin}
-                <input type="range" name="yearMax" min={yearMin} max="2019" step='1' value={yearMax} onChange={e => this.changeYearMax(e)} />{yearMax}
+                <form>
+                    <input type="range" name="runtime" min="0" max="240" step='1' value={runTimeMax} onChange={e => this.changeRunTimeMax(e)} />{this.convertMinToHours(runTimeMax)}
+                    <input type="range" name="yearMin" min="1907" max={yearMax} step='1' value={yearMin} onChange={e => this.changeYearMin(e)} />{yearMin}
+                    <input type="range" name="yearMax" min={yearMin} max="2019" step='1' value={yearMax} onChange={e => this.changeYearMax(e)} />{yearMax}
+                </form>
                 <p>{`Films compris entre ${yearMin} et ${yearMax} dont la durée ne dépasse pas ${this.convertMinToHours(runTimeMax)}`}</p>
                 {namesGenreSelected.length ?
                     <p>Vous avez choisi : {`${namesGenreSelected}`}</p>
                     :
                     <p>Pas de genre selectionné</p>
                 }
-                <button onClick={this.seachMovies}>Lancer la rechercher</button>
-                <button onClick={this.refrechState}>Effacer tout</button>
-
+                <div className='displayButtons'>
+                    <button onClick={this.seachMovies}>Lancer la rechercher</button>
+                    <button onClick={e => window.location.reload()}>Effacer tout</button>
+                </div>
 
                 <div className="response">
                     {this.state.moviesFound
