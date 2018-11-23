@@ -3,12 +3,12 @@
 }
 
 .response {
+    padding-top: 12px;
     min-height: 350px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
-    align-items: center;
 }
 
 button {   
