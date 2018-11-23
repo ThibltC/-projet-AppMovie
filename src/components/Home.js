@@ -28,7 +28,6 @@ class Home extends Component {
         }
     }
 
-
     getMovies = () => {
         const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
         fetch(`https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${this.state.inputSearchMovie}&page=1&region=FR&language=fr-FR`)
@@ -55,27 +54,23 @@ class Home extends Component {
         })
     }
 
-
-
-
     render() {
         if (this.state.redirect) return <Redirect to={`/movie${this.state.resultMovies[0].id}`} />
         return (
-            <div className='Home'>
+            <div className='HomeComponent' >
                 <Header />
-
-                <form autoComplete='off' className='displaySearch' onSubmit={this.handleSubmit}>
-
-
-                    <SearchBar
-                        inputSearch={this.state.inputSearchMovie}
-                        changeInput={this.changeInputMovie}
-                        handleSubmit={this.handleSubmit}
-                    />
+                <div className='Home'>
+                    <form autoComplete='off' className='displaySearch' onSubmit={this.handleSubmit}>
+                        <SearchBar
+                            inputSearch={this.state.inputSearchMovie}
+                            changeInput={this.changeInputMovie}
+                            handleSubmit={this.handleSubmit}
+                        />
+                    </form>
                     <Link to='/search'>
                         <button >Recherche avancée</button>
                     </Link>
-                </form>
+                </div>
                 {(this.state.isLoaded && this.state.inputSearchMovie.length !== 0) &&
                     <div className="response">
                         {this.state.resultMovies
@@ -90,9 +85,9 @@ class Home extends Component {
                                 </Link>
                             )
                         }
-
                     </div>
                 }
+
             </div>
         )
     }
