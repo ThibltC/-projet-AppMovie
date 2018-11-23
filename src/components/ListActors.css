@@ -1,26 +1,28 @@
 .ListActors{
-    color: black;
-    transition: transform .2s;
     display: flex;
     flex-direction: column;
+    text-align:center;
+    margin: 0px 5px;
     align-items: center;
 }
 
 .ListActors img {
-    height: 140px;
-    width: 140px;   
+    height: 100px;
+    width: 100px;   
     object-fit: cover;
     border-radius: 50%;
-    margin: 1vw;
+    transition: 0.2s;
 }
 
-.ListActors:hover {
+.ListActors img:hover {
     -ms-transform: scale(1.15); /* IE 9 */
     -webkit-transform: scale(1.15); /* Safari 3-8 */
     transform: scale(1.15);    
 }
 
 .ListActors h3{
-    color:white;
-    margin-top: -6px
+    color:rgb(231, 228, 228);
+    margin-top: 6px;
+    font-size: 90%;
+    width: 120px;
 }

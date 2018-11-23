@@ -4,6 +4,8 @@ import Slide from '@material-ui/core/Slide';
 import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
+import Loader from 'react-loader-spinner';
+
 
 import ListActors from '../components/ListActors';
 
@@ -34,6 +36,7 @@ class Movie extends Component {
         idActor: undefined,
         checkedResume: false,
         checkedCasting: false,
+        opacityValue: 1,
 
     }
 
@@ -74,68 +77,68 @@ class Movie extends Component {
     }
 
     handleChangeResume = () => {
-        this.setState(state => ({ checkedResume: !state.checkedResume, checkedCasting: false }));
+        this.setState(state => ({
+            checkedResume: !state.checkedResume,
+        }));
     };
-    handleChangeCasting = () => {
-        this.setState(state => ({ checkedCasting: !state.checkedCasting, checkedResume: false }));
-    };
+
 
     render() {
         const { classes } = this.props;
-        const { checkedResume, checkedCasting, movieDetails } = this.state;
+        const { checkedResume, movieDetails, opacityValue } = this.state;
 
-        if (!this.state.isLoading) return <div className='loading'>Loading...</div>
+        if (!this.state.isLoading) return (
+            <div className='loading'>
+                <Loader
+                    type="TailSpin"
+                    color="grey"
+                    height="200"
+                    width="200"
+                />
+            </div>
+        )
 
         return (
             this.state.isLoading &&
-            <div className="Movie">
-                <h2>{movieDetails.title}</h2>
-                <img className='mainImage' src={`https://image.tmdb.org/t/p/w300${movieDetails.poster_path}`} alt="poster_path" />
-                <div className='moviesInfos'>
-                    <p>Sorti le {movieDetails.release_date.split('-').reverse().join('.')}</p>
-                    <p>{this.convertMinToHours(movieDetails.runtime)}</p>
-                </div>
-
-                <div className=''>Résumé
-                    <Switch checked={checkedResume}
-                        onChange={this.handleChangeResume}
-                        aria-label="Collapse"
-                        classes={{
-                            switchBase: classes.colorSwitchBase,
-                            checked: classes.colorChecked,
-                            bar: classes.colorBar,
-                        }} />
-                    Casting
-                    <Switch checked={checkedCasting}
-                        onChange={this.handleChangeCasting}
-                        aria-label="Collapse"
-                        classes={{
-                            switchBase: classes.colorSwitchBase,
-                            checked: classes.colorChecked,
-                            bar: classes.colorBar,
-                        }} />
-                    <Link to='/'>
-                        <button className='buttonHome'>Accueil</button>
-                    </Link>
-                </div>
-
+            <div className="Movie" >
                 <Slide direction="up" in={checkedResume} mountOnEnter unmountOnExit>
                     <div className='resume' >
                         <p>{movieDetails.overview}</p>
                     </div>
                 </Slide>
-                <Slide direction="up" in={checkedCasting} mountOnEnter unmountOnExit>
-                    <div className='listResults'>
-                        {this.state.casting.map((caracDetails, i) =>
-                            <Link to={`/actor${caracDetails.id}`} key={`actor-${i}`}>
-                                <ListActors
-                                    caracDetails={caracDetails}
-                                    getIdActor={this.getIdActor}
-                                />
-                            </Link>
-                        )}
+                <div className='displayMovie' style={{ opacity: `${opacityValue}` }} >
+                    <h2>{movieDetails.title}</h2>
+
+                    <img className='mainImage' src={`https://image.tmdb.org/t/p/w300${movieDetails.poster_path}`} alt="poster_path" />
+                    <div className='moviesInfos'>
+                        <p>Sorti le {movieDetails.release_date.split('-').reverse().join('.')}</p>
+                        <p>{this.convertMinToHours(movieDetails.runtime)}</p>
                     </div>
-                </Slide>
+                    <div className='displayButtons'>Résumé
+                    <Switch checked={checkedResume}
+                            onChange={this.handleChangeResume}
+                            aria-label="Collapse"
+                            classes={{
+                                switchBase: classes.colorSwitchBase,
+                                checked: classes.colorChecked,
+                                bar: classes.colorBar,
+                            }} />
+                        <Link to='/'>
+                            <button className='buttonHome'>Accueil</button>
+                        </Link>
+                    </div>
+                </div>
+
+                <div className='listResults'>
+                    {this.state.casting.map((caracDetails, i) =>
+                        <Link to={`/actor${caracDetails.id}`} key={`actor-${i}`}>
+                            <ListActors
+                                caracDetails={caracDetails}
+                                getIdActor={this.getIdActor}
+                            />
+                        </Link>
+                    )}
+                </div>
             </div>
         );
     }

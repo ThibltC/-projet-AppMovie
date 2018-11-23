@@ -16,9 +16,9 @@
     animation: Header-logo-spin infinite 2s linear;
 }
 
-.Header p{
+.Header h1{
     z-index: 15;
-    font-size: 53px;
+    font-size: 40px;
     color: rgb(247, 245, 245);
     align-self: center;
     text-shadow: 5px 5px 10px rgb(22, 22, 22);

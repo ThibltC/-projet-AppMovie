@@ -28,7 +28,7 @@ class Header extends Component {
         return (
             <header className="Header">
                 <img src={logo} className="Header-logo" alt="logo" />
-                <p>App Movies</p>
+                <h1>App Movies</h1>
                 {this.state.imageLoaded &&
                     <Link to={`/movie${randomMovie.id}`} >
                         <div className='randomHeaderStyle'>

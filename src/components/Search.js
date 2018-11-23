@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import ListMovies from './ListMovies';
 
@@ -13,11 +13,11 @@ class Search extends Component {
         genres,
         idsGenreSelected: [],
         namesGenreSelected: [],
-        isPluriel: 's',
+        
 
         moviesFound: [],
 
-        runTimeMax: 90,
+        runTimeMax: 240,
         idMovie: undefined,
         changeRoute: false,
         yearMin: 1907,
@@ -26,34 +26,18 @@ class Search extends Component {
 
     }
 
-    // componentDidMount = () => {
-    //     const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
-    //     fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${api_key}&language=fr-FR`)
-    //         .then(response => response.json())
-    //         .then(data => this.setState({
-    //             genres: data.genres
-    //         }))
-    // }
-
     seachMovies = () => {
-        // if (localStorage.getItem('Recherche')) {
-        //     const el = JSON.parse(localStorage.getItem('Recherche'))
-        //     this.setState({
-
-        //         moviesFound: el.results,
-        //     })
-        // } else {
         const { runTimeMax, idsGenreSelected, yearMin, yearMax } = this.state
         const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
         fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&language=fr-FR&sort_by=popularity.desc&primary_release_date.gte=${yearMin}-01-01&primary_release_date.lte=${yearMax}-12-31&with_genres=${idsGenreSelected}&with_runtime.lte=${runTimeMax}`)
             .then(response => response.json())
             .then(data => {
-                // localStorage.setItem('Recherche', JSON.stringify({moviesFound: data.results}))
                 this.setState({
                     moviesFound: data.results,
+                    redirect: true
                 })
             })
-        // }
+
     }
 
     addOrRemoveGenre = (e, id, name) => {
@@ -64,7 +48,7 @@ class Search extends Component {
         if (namesGenreSelected.includes(name)) {
             this.setState({
                 idsGenreSelected: newId.filter(e => e !== id),
-                namesGenreSelected: newName.filter(e => e !== name)
+                namesGenreSelected: newName.filter(e => e !== name),
             })
         } else {
             newId.push(id)
@@ -112,15 +96,16 @@ class Search extends Component {
 
 
     render() {
-        const { yearMax, yearMin, namesGenreSelected, isPluriel } = this.state
-        console.log('ids', this.state.idsGenreSelected, 'names', this.state.namesGenreSelected)
+        const { yearMax, yearMin, namesGenreSelected, runTimeMax } = this.state
+
         return (
             <div className='Search' >
-
-             
                 <h2>Choisissez vos critères</h2>
+                <Link to='/'>
+                    <button>Retour à l'accueil</button>
+                </Link>
                 <div className='listGenres'>
-                    {this.state.genres.map((e, i) => {
+                    {this.state.genres.map(e => {
                         return (
                             <div className='genre' key={e.name} onClick={event => this.addOrRemoveGenre(event, e.id, e.name)}>
                                 {e.name}
@@ -128,25 +113,19 @@ class Search extends Component {
                         )
                     })}
                 </div>
+
+                <input type="range" name="runtime" min="0" max="240" step='1' value={runTimeMax} onChange={e => this.changeRunTimeMax(e)} />{this.convertMinToHours(runTimeMax)}
+                <input type="range" name="yearMin" min="1907" max={yearMax} step='1' value={yearMin} onChange={e => this.changeYearMin(e)} />{yearMin}
+                <input type="range" name="yearMax" min={yearMin} max="2019" step='1' value={yearMax} onChange={e => this.changeYearMax(e)} />{yearMax}
+                <p>{`Films compris entre ${yearMin} et ${yearMax} dont la durée ne dépasse pas ${this.convertMinToHours(runTimeMax)}`}</p>
                 {namesGenreSelected.length ?
-                    // console.log(namesGenreSelected)
-                    <h3>Vous avez choisi : {namesGenreSelected}</h3>
+                    <p>Vous avez choisi : {`${namesGenreSelected}`}</p>
                     :
-                    <h3>Pas de genre selectionné</h3>
+                    <p>Pas de genre selectionné</p>
                 }
-                <input type="range" name="runtime" min="0" max="240" step='10' value={this.state.runTimeMax} onChange={e => this.changeRunTimeMax(e)} />{this.convertMinToHours(this.state.runTimeMax)}
-                <form>
-                    <h3>Films apres :</h3>
-                    <input type="number" name="yearMin" min="1907" max="2019" value={this.state.yearMin} onChange={e => this.changeYearMin(e)} />
-                    <h3>Films avant :</h3>
-                    <input type="number" name="yearMax" min="1907" max="2019" value={this.state.yearMax} onChange={e => this.changeYearMax(e)} />
-                </form>
-                <h2>{`Films compris entre ${yearMin} et ${yearMax} de style ${namesGenreSelected} dont la durée ne dépasse pas ${this.convertMinToHours(this.state.runTimeMax)}`}</h2>
                 <button onClick={this.seachMovies}>Lancer la rechercher</button>
                 <button onClick={this.refrechState}>Effacer tout</button>
-                <Link to='/'>
-                    <button>Retour à l'accueil</button>
-                </Link>
+
 
                 <div className="response">
                     {this.state.moviesFound
@@ -162,17 +141,6 @@ class Search extends Component {
                     }
 
                 </div>
-                {/* <form onSubmit={_ => this.handleSubmit(e,id)}>
-                    {this.state.genres.map((e, i) => {
-                        return (<div><input type='checkbox' name={e.name} id={i} key={e.name} />{e.name}</div>)
-
-                    })}
-                    <input type='submit' value='caca' />
-                </form> */}
-
-
-
-
             </div>
 
         )

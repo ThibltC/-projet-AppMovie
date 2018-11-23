@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import ListMovies from '../components/ListMovies';
+import Loader from 'react-loader-spinner';
 
 import './Actor.css';
 
@@ -41,14 +42,23 @@ class Actor extends Component {
 
 
     render() {
-        console.log(this.state.actorFilmo)
-        if (!this.state.isLoading)
-            return <div className='loading'>Loading...</div>
+
+        if (!this.state.isLoading) return (
+            <div className='loading'>
+                <Loader
+                    type="TailSpin"
+                    color="grey"
+                    height="200"
+                    width="200"
+                />
+            </div>
+        )
+
         return (
             <div className='Actor'>
-            <h2>{this.state.actorDetails.name}</h2>
+                <h2>{this.state.actorDetails.name}</h2>
                 <img className='mainImage' src={`https://image.tmdb.org/t/p/w300${this.state.actorDetails.profile_path}`} alt="poster_path" />
-                
+
                 {this.state.actorDetails.birthday &&
                     <p>Anniversaire : {this.state.actorDetails.birthday.split('-').reverse().join('.')}</p>
                 }
