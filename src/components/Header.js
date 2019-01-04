@@ -2,34 +2,23 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './Header.css';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { getMovieHeader } from '../actions/fetchActions'
 
 
 class Header extends Component {
 
-    state = {
-        randomMovie: undefined,
-        imageLoaded: false,
-    }
-
     componentWillMount = () => {
-        const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
-        fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${api_key}&language=fr-FR&page=1&region=Fr`)
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    randomMovie: data.results[Math.floor(Math.random() * 20)],
-                    imageLoaded: true
-                });
-            });
+        this.props.getMovieHeader()
     }
 
     render() {
-        const {randomMovie} = this.state
+        const {randomMovie} = this.props
         return (
             <header className="Header">
                 <img src={logo} className="Header-logo" alt="logo" />
                 <h1>App Movies</h1>
-                {this.state.imageLoaded &&
+                {this.props.moviesIsLoaded &&
                     <Link to={`/movie${randomMovie.id}`} >
                         <div className='randomHeaderStyle'>
                             <div className='filtreImage'></div>
@@ -42,4 +31,9 @@ class Header extends Component {
     }
 }
 
-export default Header;
+const mapStateToProps = state => ({
+    randomMovie: state.fetchMovies.randomMovie,
+    moviesIsLoaded: state.fetchMovies.imageLoaded
+});
+
+export default connect(mapStateToProps, { getMovieHeader })(Header);
