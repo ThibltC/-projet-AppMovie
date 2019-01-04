@@ -17,14 +17,15 @@ class Actor extends Component {
 
     componentWillMount = async () => {
         const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
-        await fetch(`https://api.themoviedb.org/3/person/${this.props.match.params.id}?api_key=${api_key}&language=fr-FR`)
+        const { id } =  this.props.match.params
+        await fetch(`https://api.themoviedb.org/3/person/${id}?api_key=${api_key}&language=fr-FR`)
             .then(data => data.json())
             .then(data => {
                 this.setState({
                     actorDetails: data,
                 })
             })
-        fetch(`https://api.themoviedb.org/3/person/${this.props.match.params.id}/movie_credits?api_key=${api_key}&language=fr-FR`)
+        fetch(`https://api.themoviedb.org/3/person/${id}/movie_credits?api_key=${api_key}&language=fr-FR`)
             .then(data => data.json())
             .then(data => {
                 this.setState({

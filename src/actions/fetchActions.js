@@ -1,5 +1,4 @@
 import { FETCH_MOVIE, FETCH_HEADER } from './types';
-// import { connect } from "react-redux";
 const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
 
 export const getMoviesInHome = (query) => (dispatch) => { 
@@ -25,12 +24,3 @@ export const getMovieHeader = () => (dispatch) => {
           });
       });
 }
-
-// export const action2 = () => (dispatch) => {
-//   dispatch({
-//     type: ACTION_TYPE2,
-//     property: value,
-//   });
-// };
-
-// export default connect(action1, action2)

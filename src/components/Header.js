@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './Header.css';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+
 import { getMovieHeader } from '../actions/fetchActions'
+
+import logo from './logo.svg';
+
+import './Header.css';
+
+
 
 
 class Header extends Component {
 
-    componentWillMount = () => {
+    componentDidMount = () => {
         this.props.getMovieHeader()
     }
 
@@ -22,7 +27,10 @@ class Header extends Component {
                     <Link to={`/movie${randomMovie.id}`} >
                         <div className='randomHeaderStyle'>
                             <div className='filtreImage'></div>
-                            <img src={`https://image.tmdb.org/t/p/original${randomMovie.backdrop_path}`} alt={randomMovie.title} />
+                            {randomMovie.backdrop_path ?
+                             <img src={`https://image.tmdb.org/t/p/original${randomMovie.backdrop_path}`} alt={randomMovie.title} />
+                            :
+                            <img src={`https://image.tmdb.org/t/p/original${randomMovie.poster_path}`} alt={randomMovie.title} />}            
                         </div>
                     </Link>
                 }
@@ -33,7 +41,7 @@ class Header extends Component {
 
 const mapStateToProps = state => ({
     randomMovie: state.fetchMovies.randomMovie,
-    moviesIsLoaded: state.fetchMovies.imageLoaded
+    moviesIsLoaded: state.fetchMovies.headerImageIsLoaded
 });
 
 export default connect(mapStateToProps, { getMovieHeader })(Header);

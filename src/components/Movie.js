@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import ListActors from '../components/ListActors';
+
 import Slide from '@material-ui/core/Slide';
 import Switch from '@material-ui/core/Switch';
 import { withStyles } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import Loader from 'react-loader-spinner';
 
-
-import ListActors from '../components/ListActors';
+import { redirection } from '../actions/redirectionActions'
+import { getMovieInfos, getMovieCredits, emptyMovieInfos } from '../actions/moviesActions'
 
 import './Movie.css';
 
@@ -27,8 +31,6 @@ const styles = () => ({
 
 class Movie extends Component {
 
-
-
     state = {
         isLoading: false,
         movieDetails: undefined,
@@ -40,23 +42,10 @@ class Movie extends Component {
 
     }
 
-    componentWillMount = async () => {
-        const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
-        await fetch(`https://api.themoviedb.org/3/movie/${this.props.match.params.id}?api_key=${api_key}&language=fr-FR`)
-            .then(data => data.json())
-            .then(data => {
-                this.setState({
-                    movieDetails: data,
-                })
-            })
-        fetch(`https://api.themoviedb.org/3/movie/${this.props.match.params.id}/credits?api_key=${api_key}&language=fr-FR`)
-            .then(data => data.json())
-            .then(data => {
-                this.setState({
-                    casting: data.cast,
-                    isLoading: true,
-                })
-            })
+    componentDidMount = async () => {
+        const { id } = this.props.match.params
+        await this.props.getMovieInfos(id)
+        this.props.getMovieCredits(id)
     }
 
     getIdActor = (idActor) => {
@@ -80,10 +69,10 @@ class Movie extends Component {
 
 
     render() {
-        const { classes } = this.props;
-        const { checkedResume, movieDetails, opacityValue } = this.state;
+        const { movieDetails, isLoadingCredits, casting, classes } = this.props;
+        const { opacityValue, checkedResume } = this.state
 
-        if (!this.state.isLoading) return (
+        if (!isLoadingCredits) return (
             <div className='loading'>
                 <Loader
                     type="TailSpin"
@@ -95,8 +84,8 @@ class Movie extends Component {
         )
 
         return (
-            this.state.isLoading &&
-            <div className="Movie" >
+            isLoadingCredits &&
+            <div className="Movie" onClick={this.props.emptyMovieInfos}>
                 <Slide direction="up" in={checkedResume} mountOnEnter unmountOnExit>
                     <div className='resume' >
                         <p>{movieDetails.overview}</p>
@@ -122,13 +111,13 @@ class Movie extends Component {
                             }}
                         />
                         <Link to='/'>
-                            <button className='buttonHome'>Accueil</button>
+                            <button onclick={this.props.redirection(false)} className='buttonHome'>Accueil</button>
                         </Link>
                     </div>
                 </div>
 
                 <div className='listResults'>
-                    {this.state.casting.map((caracDetails, i) =>
+                    {casting.map((caracDetails, i) =>
                         <Link to={`/actor${caracDetails.id}`} key={`actor-${i}`}>
                             <ListActors
                                 caracDetails={caracDetails}
@@ -142,4 +131,11 @@ class Movie extends Component {
     }
 }
 
-export default withStyles(styles)(Movie);
+const mapStateToProps = state => ({
+    redirect: state.redirection.redirect,
+    isLoadingCredits: state.movieData.isLoadingCredits,
+    movieDetails: state.movieData.movieDetails,
+    casting: state.movieData.casting
+});
+
+export default connect(mapStateToProps, { redirection, getMovieInfos, getMovieCredits, emptyMovieInfos })(withStyles(styles)(Movie));

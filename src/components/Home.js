@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getMoviesInHome } from '../actions/fetchActions'
-
 
 import ListMovies from './ListMovies';
 import Header from './Header';
+
+import { getMoviesInHome } from '../actions/fetchActions'
+import { redirection } from '../actions/redirectionActions'
 
 import './Home.css';
 
@@ -16,8 +17,6 @@ class Home extends Component {
     state = {
         inputSearchMovie: '',
         idMovie: undefined,
-        randomMoviePoster: undefined,
-        redirect: false
     }
 
     changeInputMovie = async (event) => {
@@ -29,24 +28,9 @@ class Home extends Component {
         }
     }
 
-    // getMovies = () => {
-    //     const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
-    //     fetch(`https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${this.state.inputSearchMovie}&page=1&region=FR&language=fr-FR`)
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             this.setState({
-    //                 resultMovies: data.results,
-    //                 isLoaded: true,
-    //             });
-    //         });
-
-    // }
-
     handleSubmit = (e) => {
         e.preventDefault()
-        this.setState({
-            redirect: true
-        })
+        this.props.redirection(true)
     }
 
     getIdMovie = (idMovie) => {
@@ -56,8 +40,8 @@ class Home extends Component {
     }
 
     render() {
-        const { resultMovies, moviesAreLoaded } = this.props
-        if (this.state.redirect) return <Redirect to={`/movie${resultMovies[0].id}`} />
+        const { resultMovies, moviesAreLoaded, redirect} = this.props
+        if (redirect) return <Redirect to={`/movie${resultMovies[0].id}`} />
         return (
             <div className='HomeComponent' >
                 <Header />
@@ -100,8 +84,8 @@ class Home extends Component {
 
 const mapStateToProps = state => ({
     resultMovies: state.fetchMovies.listMovies,
-    moviesAreLoaded: state.fetchMovies.areLoaded
-
+    moviesAreLoaded: state.fetchMovies.areLoaded,
+    redirect: state.redirection.redirect
 });
 
-export default connect(mapStateToProps, { getMoviesInHome })(Home)
+export default connect(mapStateToProps, { getMoviesInHome, redirection })(Home)

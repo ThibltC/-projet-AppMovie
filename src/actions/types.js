@@ -1,2 +1,6 @@
 export const FETCH_MOVIE = 'FETCH_MOVIE';
 export const FETCH_HEADER = 'FETCH_HEADER';
+export const REDIRECTION = 'REDIRECTION';
+export const GET_MOVIE_INFO = 'GET_MOVIE_INFO';
+export const GET_CREDITS_INFO = 'GET_CREDITS_INFO';
+export const CLEAN_INFOS_MOVIE = 'CLEAN_INFOS_MOVIE';

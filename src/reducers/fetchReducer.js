@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         randomMovie: action.randomMovie,
-        imageLoaded: action.imageLoaded
+        headerImageIsLoaded: action.imageLoaded
       };
     default: return state
   }
