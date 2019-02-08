@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Element } from "react-scroll";
 
 import ListMovies from './ListMovies';
 
 import genres from './genres';
+import scrollTo from '../helpers/scrollTo'
+import convertMinToHours from '../helpers/convertMinToHours'
 
 import './Search.css'
 
@@ -13,15 +16,14 @@ class Search extends Component {
         genres,
         idsGenreSelected: [],
         namesGenreSelected: [],
-
         moviesFound: [],
-
         runTimeMax: 240,
         idMovie: undefined,
         changeRoute: false,
         yearMin: 1907,
         yearMax: 2019,
     }
+
 
     seachMovies = () => {
         const { runTimeMax, idsGenreSelected, yearMin, yearMax } = this.state
@@ -34,6 +36,7 @@ class Search extends Component {
                     redirect: true
                 })
             })
+        scrollTo("goResponse")
     }
 
     addOrRemoveGenre = (e, id, name) => {
@@ -56,27 +59,9 @@ class Search extends Component {
         }
     }
 
-    convertMinToHours = (min) => {
-        const h = Math.trunc(min / 60)
-        const m = Math.ceil((min / 60 - h) * 60)
-        if (m > 9) return h + 'h' + m
-        return h + 'h0' + m
-    }
-
-    changeRunTimeMax = (event) => {
+    handleChange = (e) => {
         this.setState({
-            runTimeMax: event.target.value
-        })
-    }
-
-    changeYearMin = (event) => {
-        this.setState({
-            yearMin: event.target.value
-        })
-    }
-    changeYearMax = (event) => {
-        this.setState({
-            yearMax: event.target.value
+            [e.target.name]: e.target.value
         })
     }
 
@@ -109,40 +94,40 @@ class Search extends Component {
                             })}
                         </div>
                         <form>
-                            <input type="range" name="runtime" min="0" max="240" step='1' value={runTimeMax} onChange={e => this.changeRunTimeMax(e)} />
-                            Durée Max : {this.convertMinToHours(runTimeMax)}
-                            <input type="range" name="yearMin" min="1907" max={yearMax} step='1' value={yearMin} onChange={e => this.changeYearMin(e)} />
+                            <input type="range" name="runTimeMax" min="0" max="240" step='1' value={runTimeMax} onChange={this.handleChange} />
+                            Durée Max : {convertMinToHours(runTimeMax)}
+                            <input type="range" name="yearMin" min="1907" max={yearMax} step='1' value={yearMin} onChange={this.handleChange} />
                             Année Min : {yearMin}
-                            <input type="range" name="yearMax" min={yearMin} max="2019" step='1' value={yearMax} onChange={e => this.changeYearMax(e)} />
+                            <input type="range" name="yearMax" min={yearMin} max="2019" step='1' value={yearMax} onChange={this.handleChange} />
                             Année Max : {yearMax}
                         </form>
                     </div>
 
-                    <p>{`Films compris entre ${yearMin} et ${yearMax} dont la durée ne dépasse pas ${this.convertMinToHours(runTimeMax)}`}</p>
+                    <p>{`Films compris entre ${yearMin} et ${yearMax} dont la durée ne dépasse pas ${convertMinToHours(runTimeMax)}`}</p>
                     {namesGenreSelected.length ?
                         <p>Vous avez choisi : {`${namesGenreSelected}`}</p>
                         :
                         <p>Pas de genre selectionné</p>
                     }
                     <div className='displayButtons'>
-                        <a href='#response'><button onClick={this.seachMovies}>Lancer la rechercher</button></a>
+                        <button onClick={this.seachMovies}>Lancer la rechercher</button>
                         <button onClick={e => window.location.reload()}>Effacer tout</button>
                     </div>
                 </div>
-                <div id='response' className="response">
-                    {this.state.moviesFound
-                        .filter((_, i) => i < 15)
-                        .map((element, i) =>
-                            <Link to={`/movie${element.id}`} key={`movie-${i}`}>
-                                <ListMovies
-                                    movieDetails={element}
-                                    getIdMovie={this.getIdMovie}
-                                />
-                            </Link>
-                        )
-                    }
-
-                </div>
+                <Element name="goResponse">
+                    <div className="response">
+                        {this.state.moviesFound
+                            .map((element, i) =>
+                                <Link to={`/movie${element.id}`} key={`movie-${i}`}>
+                                    <ListMovies
+                                        movieDetails={element}
+                                        getIdMovie={this.getIdMovie}
+                                    />
+                                </Link>
+                            )
+                        }
+                    </div>
+                </Element>
             </div>
 
         )

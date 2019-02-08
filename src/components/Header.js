@@ -4,11 +4,9 @@ import { connect } from 'react-redux';
 
 import { getMovieHeader } from '../actions/fetchActions'
 
-import logo from './logo.svg';
+import logo from './pink_donut_-_2_-512.png';
 
 import './Header.css';
-
-
 
 
 class Header extends Component {
@@ -21,8 +19,8 @@ class Header extends Component {
         const {randomMovie} = this.props
         return (
             <header className="Header">
-                <img src={logo} className="Header-logo" alt="logo" />
-                <h1>App Movies</h1>
+                <img src={logo} className="Main-logo" alt="logo" />
+                <h1>Donuts Movies</h1>
                 {this.props.moviesIsLoaded &&
                     <Link to={`/movie${randomMovie.id}`} >
                         <div className='randomHeaderStyle'>

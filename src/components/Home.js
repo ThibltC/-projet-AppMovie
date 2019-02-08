@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Element } from "react-scroll";
 
 import ListMovies from './ListMovies';
 import Header from './Header';
 
 import { getMoviesInHome } from '../actions/fetchActions'
 import { redirection } from '../actions/redirectionActions'
+import scrollTo from '../helpers/scrollTo'
 
 import './Home.css';
 
@@ -15,16 +17,17 @@ import './Home.css';
 class Home extends Component {
 
     state = {
-        inputSearchMovie: '',
+        inputSearchMovieHome: '',
         idMovie: undefined,
     }
 
-    changeInputMovie = async (event) => {
+    changeInputMovieHome = async (e) => {
         await this.setState({
-            inputSearchMovie: event.target.value
+            inputSearchMovieHome: e.target.value
         })
-        if (this.state.inputSearchMovie) {
-            this.props.getMoviesInHome(this.state.inputSearchMovie);
+        if (this.state.inputSearchMovieHome) {
+            this.props.getMoviesInHome(this.state.inputSearchMovieHome);
+            scrollTo('ListMoviesHomeBlock')
         }
     }
 
@@ -40,20 +43,22 @@ class Home extends Component {
     }
 
     render() {
-        const { resultMovies, moviesAreLoaded, redirect} = this.props
+        const { resultMovies, moviesAreLoaded, redirect } = this.props
+        const { inputSearchMovieHome } = this.state
+
         if (redirect) return <Redirect to={`/movie${resultMovies[0].id}`} />
         return (
-            <div className='HomeComponent' >
+            <div className='Home' >
                 <Header />
-                <div className='Home'>
+                
+                <div className='HomeBis'>
                     <div className='SearchBar'>
-                        <form autoComplete='off' className='displaySearch' onSubmit={this.handleSubmit}>
+                        <form className='displaySearch' onSubmit={this.handleSubmit} autoComplete='off' >
                             <input
-                                className='SearchBar'
                                 type='text'
                                 placeholder={`Entrer le nom d'un film`}
-                                value={this.state.inputSearch}
-                                onChange={this.changeInputMovie}
+                                value={inputSearchMovieHome}
+                                onChange={this.changeInputMovieHome}
                             />
                         </form>
                     </div>
@@ -61,22 +66,26 @@ class Home extends Component {
                         <button >Recherche avancée</button>
                     </Link>
                 </div>
-                {(moviesAreLoaded && this.state.inputSearchMovie.length !== 0) &&
-                    <div className="response">
-                        {resultMovies
-                            .sort((a, b) => b.popularity - a.popularity)
-                            .filter((_, i) => i < 20)
-                            .map((element, i) =>
-                                <Link to={`/movie${element.id}`} key={`movie-${i}`}>
-                                    <ListMovies
-                                        movieDetails={element}
-                                        getIdMovie={this.getIdMovie}
-                                    />
-                                </Link>
-                            )
-                        }
-                    </div>
+
+                {(moviesAreLoaded && inputSearchMovieHome.length !== 0) &&
+                    <Element name='ListMoviesHomeBlock'>
+                        <div className="ListMoviesHomeBlock">
+                            {resultMovies
+                                .sort((a, b) => b.popularity - a.popularity)
+                                .filter((_, i) => i < 20)
+                                .map((element, i) =>
+                                    <Link to={`/movie${element.id}`} key={`movie-${i}`}>
+                                        <ListMovies
+                                            movieDetails={element}
+                                            getIdMovie={this.getIdMovie}
+                                        />
+                                    </Link>
+                                )
+                            }
+                        </div>
+                    </Element>
                 }
+
             </div>
         )
     }

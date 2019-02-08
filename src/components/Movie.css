@@ -1,11 +1,20 @@
-.Movie {
+.MovieBis {
     position: relative;
+    justify-content: center;
+    align-items: center
+}
+
+.listResults {
+    margin: 0px 20px;
+    background-color: #3a3d42;
+    border-radius: 5px;
+    padding-top: 20px
 }
 
 .resume{
     margin-top: 50px;
     background-color: rgb(133, 133, 133);
-    position: absolute;
+    position: fixed;
     padding: 20px 10px;
     box-shadow: inset 4px 4px 15px rgb(66, 66, 66),
     inset -4px -4px 15px rgb(66, 66, 66),
@@ -28,6 +37,7 @@
     align-items: center;
     display: flex;
     width: 70vw;
+    max-width: 300px;
 }
 .Movie .displayMovie{
     display: flex;
@@ -36,7 +46,7 @@
 }
 
 .moviesInfos {
-    width: 70vw;
+    width: 280px;
     display: flex;
     flex-direction: row;
     justify-content: space-between
@@ -57,13 +67,34 @@
     padding-left: 10px;
     height: 30px;
     width: 400px;
-    font-size: medium;
-    
+    font-size: medium;  
 }
+
 
 @media screen and (max-width: 600px){
     .SearchBar input{
         width: 60vw;
     }
+}
+@media screen and (max-width: 400px){
+    .moviesInfos {
+        width: 80vw;
+    }
+}
+@media screen and (min-width: 1100px){
+    .MovieBis {
+        display: flex;
+        flex-direction: row
+    }
+    .listResults {
+        margin: 50px 20px;
+        max-height: 600px;
+        max-width: 600px;
+        overflow-x: scroll;
+    }
+    .displayMovie{
+        width: 500px;
+    }
+    
 }
 
