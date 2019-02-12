@@ -4,7 +4,7 @@ import { Element } from "react-scroll";
 
 import ListMovies from './ListMovies';
 
-import genres from './genres';
+import genres from '../helpers/genres';
 import scrollTo from '../helpers/scrollTo'
 import convertMinToHours from '../helpers/convertMinToHours'
 

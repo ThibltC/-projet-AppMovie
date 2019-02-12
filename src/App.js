@@ -5,6 +5,8 @@ import Home from './components/Home';
 import Movie from './components/Movie';
 import Actor from './components/Actor';
 import Search from './components/Search';
+import Footer from './components/Footer';
+import NotFoundPage from './components/NotFoundPage'
 
 import './App.css';
 
@@ -19,7 +21,9 @@ class App extends Component {
           <Route exact path='/movie:id(\d+)' component={Movie}/>
           <Route exact path='/actor:id(\d+)' component={Actor}/>
           <Route exact path='/search' component={Search} />
+          <Route path='/(.*)' component={NotFoundPage} />
         </Switch>
+        <Footer />
       </div>
     );
   }

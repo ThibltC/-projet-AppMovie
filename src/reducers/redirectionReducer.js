@@ -1,7 +1,8 @@
-import { REDIRECTION } from '../actions/types';
+import { REDIRECTION, REDIRECTION_DONE } from '../actions/types';
 
 const initialState = {
-    redirect: false
+    redirect: false,
+    path: '/'
 }
 
 export default (state = initialState, action) => {
@@ -9,8 +10,13 @@ export default (state = initialState, action) => {
         case REDIRECTION:
             return {
                 ...state,
-                redirect: action.redirect
-            };
+                redirect: action.redirect,
+                path: action.path
+            }
+            case REDIRECTION_DONE:
+            return {
+                state: initialState
+            }
         default: return state
     }
 }

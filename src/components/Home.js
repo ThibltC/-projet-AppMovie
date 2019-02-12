@@ -26,14 +26,14 @@ class Home extends Component {
             inputSearchMovieHome: e.target.value
         })
         if (this.state.inputSearchMovieHome) {
-            this.props.getMoviesInHome(this.state.inputSearchMovieHome);
+            await this.props.getMoviesInHome(this.state.inputSearchMovieHome);
             scrollTo('ListMoviesHomeBlock')
         }
     }
 
     handleSubmit = (e) => {
         e.preventDefault()
-        this.props.redirection(true)
+        this.props.redirection(true, `/movie${this.props.resultMovies[0].id}`)
     }
 
     getIdMovie = (idMovie) => {
@@ -43,14 +43,14 @@ class Home extends Component {
     }
 
     render() {
-        const { resultMovies, moviesAreLoaded, redirect } = this.props
+        const { resultMovies, moviesAreLoaded, redirect, path } = this.props
         const { inputSearchMovieHome } = this.state
 
-        if (redirect) return <Redirect to={`/movie${resultMovies[0].id}`} />
+        if (redirect) return <Redirect to={path} />
         return (
             <div className='Home' >
                 <Header />
-                
+
                 <div className='HomeBis'>
                     <div className='SearchBar'>
                         <form className='displaySearch' onSubmit={this.handleSubmit} autoComplete='off' >
@@ -84,8 +84,7 @@ class Home extends Component {
                             }
                         </div>
                     </Element>
-                }
-
+                }              
             </div>
         )
     }
@@ -94,7 +93,8 @@ class Home extends Component {
 const mapStateToProps = state => ({
     resultMovies: state.fetchMovies.listMovies,
     moviesAreLoaded: state.fetchMovies.areLoaded,
-    redirect: state.redirection.redirect
+    redirect: state.redirection.redirect,
+    path: state.redirection.path
 });
 
 export default connect(mapStateToProps, { getMoviesInHome, redirection })(Home)
