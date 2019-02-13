@@ -14,7 +14,6 @@ class ListMovies extends Component {
                     <img src={'https://cdn.browshot.com/static/images/not-found.png'} alt={title} />
                 }
                 <h3>{title}</h3>
-
             </div>
         );
     }

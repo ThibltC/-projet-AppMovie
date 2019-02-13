@@ -41,4 +41,24 @@ button:hover{
   .mainImage {
     height: 100vw;
   }
+  .ListMoviesBlock {
+    max-height: 400px;
+    overflow-x: scroll;
+  }
+}
+
+.ListMoviesBlock {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 20px;
+  background-color: #3a3d42;
+  border-radius: 5px;
+  padding-top: 20px;
+}
+
+.ListMoviesBlock img {
+  height: 150px;
+  width: 100px;
 }

@@ -4,10 +4,6 @@ const initialState = {
     isLoadingCredits: false,
     movieDetails: undefined,
     casting: undefined,
-    idActor: undefined,
-    checkedResume: false,
-    checkedCasting: false,
-    opacityValue: 1,
 }
 
 export default (state = initialState, action) => {
@@ -26,10 +22,7 @@ export default (state = initialState, action) => {
             case CLEAN_INFOS_MOVIE:
             return {
                 ...state,
-                isLoadingCredits: action.isLoadingCredits,
-                movieDetails: action.details,
-                casting: action.casting,
-
+                state: initialState
             }
         default: return state
     }

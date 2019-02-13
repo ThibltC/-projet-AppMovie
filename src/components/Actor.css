@@ -7,20 +7,8 @@
     align-items: center;
 }
 
-.filmographie img{
-    height: 150px;
-    width: 100px;
-}
-
 .Actor .filmographie {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap
 }
-
-.Actor .filmographie img:hover {
-    -ms-transform: scale(1.15); /* IE 9 */
-    -webkit-transform: scale(1.15); /* Safari 3-8 */
-    transform: scale(1.15);    
-}
-
