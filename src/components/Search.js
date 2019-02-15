@@ -3,41 +3,49 @@ import { Link } from 'react-router-dom';
 import { Element } from "react-scroll";
 import { connect } from 'react-redux';
 
-
 import ListMoviesBlock from './ListMoviesBlock'
 
 import { searchMoviesWithQuerys } from '../actions/searchActions'
 import genres from '../helpers/genres';
+import genresList from '../helpers/genresList'
 import scrollTo from '../helpers/scrollTo'
 import convertMinToHours from '../helpers/convertMinToHours'
 import sessionStorageActions from '../helpers/sessionStorageActions'
 
 import './Search.css'
 
-const year = new Date()
+const date = new Date()
 
 class Search extends Component {
 
     state = {
-        genres,
         idsGenreSelected: [],
         namesGenreSelected: [],
-        runTimeMax: 240,
         idMovie: undefined,
+        runTimeMax: 240,
         yearMin: 1907,
-        yearMax: year.getFullYear(),
+        yearMax: date.getFullYear(),
         originalLanguage: '',
         numPage: 1
     }
 
     componentDidMount = () => {
-        const { idsGenreSelected, yearMin, yearMax, runTimeMax } = this.state
-        sessionStorageActions('set', idsGenreSelected, yearMin, yearMax, runTimeMax)
+        const newState = sessionStorageActions('get')
+        if (newState.numPage) {
+            this.setState({
+                idsGenreSelected: newState.idsGenreSelected,
+                yearMin: parseInt(newState.yearMin),
+                yearMax: parseInt(newState.yearMax),
+                runTimeMax: parseInt(newState.runTimeMax),
+                numPage: parseInt(newState.numPage),
+                namesGenreSelected: newState.idsGenreSelected.map(e => genresList[e])
+            })
+        }
     }
 
     seachMovies = () => {
         const { idsGenreSelected, yearMin, yearMax, runTimeMax, numPage, originalLanguage } = this.state
-        sessionStorageActions('set', idsGenreSelected, yearMin, yearMax, runTimeMax)
+        sessionStorageActions('set', idsGenreSelected, yearMin, yearMax, runTimeMax, numPage)
         this.props.searchMoviesWithQuerys(runTimeMax, idsGenreSelected, yearMin, yearMax, originalLanguage, numPage)
         scrollTo("goResponse")
     }
@@ -72,21 +80,23 @@ class Search extends Component {
         await this.setState({
             numPage: e.target.value
         })
-        this.search(e)
+        this.searchWithNumPage(e)
     }
 
-    search = async (e, sign) => {
+    searchWithNumPage = async (e, sign) => {
         e.preventDefault()
         if (sign === '+1') {
             await this.setState({
                 numPage: this.state.numPage + 1
             })
+            sessionStorage.setItem('numPage', this.state.numPage)
         } else {
             await this.setState({
                 numPage: this.state.numPage - 1
             })
+            sessionStorage.setItem('numPage', this.state.numPage)
         }
-        const { runTimeMax, idsGenreSelected, yearMin, yearMax, numPage, originalLanguage } = this.state
+        const { runTimeMax, idsGenreSelected, yearMin, yearMax, originalLanguage, numPage } = this.state
         this.props.searchMoviesWithQuerys(runTimeMax, idsGenreSelected, yearMin, yearMax, originalLanguage, numPage)
     }
 
@@ -112,10 +122,10 @@ class Search extends Component {
                     </div>
                     <div className='paramsDisplay'>
                         <div className='listGenres'>
-                            {this.state.genres.map(e => {
+                            {genres.map(el => {
                                 return (
-                                    <div className='genre' key={e.name} onClick={event => this.addOrRemoveGenre(event, e.id, e.name)}>
-                                        {e.name}
+                                    <div className='genre' key={el.name} onClick={event => this.addOrRemoveGenre(event, el.id, el.name)}>
+                                        {el.name}
                                     </div>
                                 )
                             })}
@@ -138,7 +148,10 @@ class Search extends Component {
                     }
                     <div className='displayButtons'>
                         <button onClick={this.seachMovies}>Lancer la rechercher</button>
-                        <button onClick={_ => window.location.reload()}>Effacer tout</button>
+                        <button onClick={_ => {
+                            window.location.reload()
+                            sessionStorage.clear()
+                        }}>Effacer tout</button>
                     </div>
                 </div>
                 <Element name="goResponse">
@@ -146,9 +159,9 @@ class Search extends Component {
                 </Element>
                 {pagesTotal &&
                     <div className='numPageDisplay'>
-                        {numPage > 1 && <button onClick={(e) => this.search(e, '-1')}>{'<'}</button>}
+                        {numPage > 1 && <button onClick={(e) => this.searchWithNumPage(e, '-1')}>{'<'}</button>}
                         <p>{numPage}/{pagesTotal}</p>
-                        {numPage < pagesTotal && <button onClick={(e) => this.search(e, '+1')}>{'>'} </button>}
+                        {numPage < pagesTotal && <button onClick={(e) => this.searchWithNumPage(e, '+1')}>{'>'} </button>}
                     </div>}
             </div>
         )

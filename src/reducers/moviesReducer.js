@@ -17,7 +17,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 casting: action.casting,
-                isLoadingCredits: action.isLoadingCredits
+                isLoadingCredits: true
             };
             case CLEAN_INFOS_MOVIE:
             return {

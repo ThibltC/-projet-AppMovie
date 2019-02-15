@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import ListMovies from './ListMovies';
-import Loader from './LoaderPage'
+import Loader from './LoaderPage';
+import HeaderMini from './HeaderMini';
+
+import { getActorInfos, getFilmography, getTvgraphy } from '../actions/actorsActions'
 
 import grey from '@material-ui/core/colors/grey';
 import AppBar from '@material-ui/core/AppBar';
@@ -33,17 +38,13 @@ class Actor extends Component {
         this.setState({ value });
     };
 
-    componentWillMount = async () => {
+    componentDidMount = () => {
         const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
         const { id } = this.props.match.params
-        await fetch(`https://api.themoviedb.org/3/person/${id}?api_key=${api_key}&language=fr-FR`)
-            .then(data => data.json())
-            .then(data => {
-                this.setState({
-                    actorDetails: data,
-                })
-                console.log(data)
-            })
+        this.props.getActorInfos(id)
+        this.props.getFilmography(id)
+        this.props.getTvgraphy(id)
+
         fetch(`https://api.themoviedb.org/3/person/${id}/movie_credits?api_key=${api_key}&language=fr-FR`)
             .then(data => data.json())
             .then(data => {
@@ -51,7 +52,6 @@ class Actor extends Component {
                     actorFilmo: data,
                     isLoading: true,
                 })
-                console.log(data)
             })
     }
 
@@ -63,55 +63,87 @@ class Actor extends Component {
 
 
     render() {
-        const { value, isLoading} = this.state;
+        const { value } = this.state;
+        const { actorDetails, isLoadingFilmo, actorFilmo, actorTv } = this.props
 
-        if (!isLoading) return <Loader />
+        if (!isLoadingFilmo) return (
+            <Loader />
+        )
+        if (isLoadingFilmo && !actorDetails) return (
+            <Loader />
+        )
 
         return (
             <div className='Actor'>
-                <h2>{this.state.actorDetails.name}</h2>
-                <img className='mainImage' src={`https://image.tmdb.org/t/p/w300${this.state.actorDetails.profile_path}`} alt="poster_path" />
+                <HeaderMini />
+                <div className='ActorBis'>
+                    <div className='ActorDisplay'>
+                        <h2>{actorDetails.name}</h2>
+                        <img className='mainImage' src={`https://image.tmdb.org/t/p/w300${actorDetails.profile_path}`} alt="poster_path" />
 
-                {this.state.actorDetails.birthday &&
-                    <p>Anniversaire : {this.state.actorDetails.birthday.split('-').reverse().join('.')}</p>
-                }
-                <Link to='/'>
-                    <button>Accueil</button>
-                </Link>
+                        {actorDetails.birthday &&
+                            <p>Anniversaire : {actorDetails.birthday.split('-').reverse().join('.')}</p>
+                        }
+                        <Link to='/'>
+                            <button>Accueil</button>
+                        </Link>
+                    </div>
 
-                <MuiThemeProvider theme={theme}>
-                    <div className='Tabs'>
-                        <AppBar position="static" className='AppBar' >
-                            <Tabs value={value} onChange={this.handleChangeTabs}>
-                                <Tab label="Films" />
-                                <Tab label="Séries" />
-                                <Tab label="Biographie" />
-                            </Tabs>
-                        </AppBar>
-                        <div className='tabContainer'>
-                            {value === 0 &&
-                                <div className='ListMoviesBlock'>
-                                    {this.state.actorFilmo.cast
-                                        .sort((a, b) => b.popularity - a.popularity)
-                                        .map((element, i) =>
-                                            <Link to={`/movie${this.state.actorFilmo.cast[i].id}`} key={`movie-${i}`}>
+                    <MuiThemeProvider theme={theme}>
+                        <div className='Tabs'>
+                            <AppBar position="static" className='AppBar' >
+                                <Tabs value={value} onChange={this.handleChangeTabs}>
+                                    <Tab label="Films" />
+                                    <Tab label="Séries" />
+                                    <Tab label="Biographie" />
+                                </Tabs>
+                            </AppBar>
+                            <div className='tabContainer'>
+                                {value === 0 &&
+                                    <div className='ListMoviesBlock'>
+                                        {actorFilmo.cast
+                                            .sort((a, b) => b.popularity - a.popularity)
+                                            .map((element, i) =>
+                                                <Link to={`/movie${actorFilmo.cast[i].id}`} key={`movie-${i}`}>
+                                                    <ListMovies
+                                                        movieDetails={element}
+                                                        getIdMovie={this.getIdMovie}
+                                                    />
+                                                </Link>
+                                            )}
+                                    </div>
+                                }
+                                {value === 1 &&
+                                    <div className='ListMoviesBlock'>
+                                        {actorTv.cast
+                                            .sort((a, b) => b.popularity - a.popularity)
+                                            .map((element, i) =>
                                                 <ListMovies
                                                     movieDetails={element}
                                                     getIdMovie={this.getIdMovie}
                                                 />
-                                            </Link>
-                                        )}
-                                </div>
-                            }
-                            {value === 1 && <div/>}
-                            {value === 2 && <div />}
+                                            )}
+                                    </div>
+                                }
+                                {value === 2 &&
+                                    <div className='biography'>
+                                        {actorDetails.biography ? <p>{actorDetails.biography}</p> : <p>Pas de biographie...</p>}
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    </div>
-                </MuiThemeProvider>
-
+                    </MuiThemeProvider>
+                </div>
             </div>
         )
     }
 }
 
-export default Actor;
+const mapStateToProps = state => ({
+    isLoadingFilmo: state.actorData.isLoadingFilmo,
+    actorDetails: state.actorData.actorDetails,
+    actorFilmo: state.actorData.filmo,
+    actorTv: state.actorData.tv
+});
+
+export default connect(mapStateToProps, { getActorInfos, getFilmography, getTvgraphy })(Actor);

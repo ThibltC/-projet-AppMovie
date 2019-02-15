@@ -1,4 +1,4 @@
-import { REDIRECTION, REDIRECTION_DONE } from '../actions/types';
+import { REDIRECTION, REDIRECTION_DONE } from './types';
 
 export const redirection = (bool, path) => (dispatch) => {
     dispatch({
