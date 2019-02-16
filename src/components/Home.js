@@ -1,51 +1,39 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Element } from "react-scroll";
 
 import ListMovies from './ListMovies';
-import SearchBar from './SearchBar';
 import Header from './Header';
 
+import { getMoviesInHome } from '../actions/fetchActions'
+import { redirection } from '../actions/redirectionActions'
+import scrollTo from '../helpers/scrollTo'
+
 import './Home.css';
+
 
 
 class Home extends Component {
 
     state = {
-        inputSearchMovie: '',
-        resultMovies: [],
-        isLoaded: false,
+        inputSearchMovieHome: '',
         idMovie: undefined,
-        randomMoviePoster: undefined,
-        redirect: false
     }
 
-    changeInputMovie = async (event) => {
+    changeInputMovieHome = async (e) => {
         await this.setState({
-            inputSearchMovie: event.target.value
+            inputSearchMovieHome: e.target.value
         })
-        if (this.state.inputSearchMovie) {
-            this.getMovies();
+        if (this.state.inputSearchMovieHome) {
+            await this.props.getMoviesInHome(this.state.inputSearchMovieHome);
+            scrollTo('ListMoviesHomeBlock')
         }
-    }
-
-    getMovies = () => {
-        const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
-        fetch(`https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${this.state.inputSearchMovie}&page=1&region=FR&language=fr-FR`)
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    resultMovies: data.results,
-                    isLoaded: true,
-                });
-            });
-
     }
 
     handleSubmit = (e) => {
         e.preventDefault()
-        this.setState({
-            redirect: true
-        })
+        this.props.redirection(true, `/movie${this.props.resultMovies[0].id}`)
     }
 
     getIdMovie = (idMovie) => {
@@ -55,42 +43,58 @@ class Home extends Component {
     }
 
     render() {
-        if (this.state.redirect) return <Redirect to={`/movie${this.state.resultMovies[0].id}`} />
+        const { resultMovies, moviesAreLoaded, redirect, path } = this.props
+        const { inputSearchMovieHome } = this.state
+
+        if (redirect) return <Redirect to={path} />
         return (
-            <div className='HomeComponent' >
+            <div className='Home' >
                 <Header />
-                <div className='Home'>
-                    <form autoComplete='off' className='displaySearch' onSubmit={this.handleSubmit}>
-                        <SearchBar
-                            inputSearch={this.state.inputSearchMovie}
-                            changeInput={this.changeInputMovie}
-                            handleSubmit={this.handleSubmit}
-                        />
-                    </form>
+
+                <div className='HomeBis'>
+                    <div className='SearchBar'>
+                        <form className='displaySearch' onSubmit={this.handleSubmit} autoComplete='off' >
+                            <input
+                                type='text'
+                                placeholder={`Entrer le nom d'un film`}
+                                value={inputSearchMovieHome}
+                                onChange={this.changeInputMovieHome}
+                            />
+                        </form>
+                    </div>
                     <Link to='/search'>
                         <button >Recherche avancée</button>
                     </Link>
                 </div>
-                {(this.state.isLoaded && this.state.inputSearchMovie.length !== 0) &&
-                    <div className="response">
-                        {this.state.resultMovies
-                            .sort((a, b) => b.popularity - a.popularity)
-                            .filter((_, i) => i < 6)
-                            .map((element, i) =>
-                                <Link to={`/movie${element.id}`} key={`movie-${i}`}>
-                                    <ListMovies
-                                        movieDetails={element}
-                                        getIdMovie={this.getIdMovie}
-                                    />
-                                </Link>
-                            )
-                        }
-                    </div>
-                }
 
+                {(moviesAreLoaded && inputSearchMovieHome.length !== 0) &&
+                    <Element name='ListMoviesHomeBlock'>
+                        <div className="ListMoviesHomeBlock">
+                            {resultMovies
+                                .sort((a, b) => b.popularity - a.popularity)
+                                .filter((_, i) => i < 20)
+                                .map((element, i) =>
+                                    <Link to={`/movie${element.id}`} key={`movie-${i}`}>
+                                        <ListMovies
+                                            movieDetails={element}
+                                            getIdMovie={this.getIdMovie}
+                                        />
+                                    </Link>
+                                )
+                            }
+                        </div>
+                    </Element>
+                }              
             </div>
         )
     }
 }
 
-export default Home
+const mapStateToProps = state => ({
+    resultMovies: state.fetchMovies.listMovies,
+    moviesAreLoaded: state.fetchMovies.areLoaded,
+    redirect: state.redirection.redirect,
+    path: state.redirection.path
+});
+
+export default connect(mapStateToProps, { getMoviesInHome, redirection })(Home)

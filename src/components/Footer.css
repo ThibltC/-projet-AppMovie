@@ -1,0 +1,16 @@
+.Footer {
+    position: fixed;
+    bottom: 0;
+    background-color: black;
+    opacity: 0.4;
+    height: 25px;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Footer p {
+    margin: 0 20px;
+}

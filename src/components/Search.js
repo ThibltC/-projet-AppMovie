@@ -1,39 +1,53 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { Element } from "react-scroll";
+import { connect } from 'react-redux';
 
-import ListMovies from './ListMovies';
+import ListMoviesBlock from './ListMoviesBlock'
 
-import genres from './genres';
+import { searchMoviesWithQuerys } from '../actions/searchActions'
+import genres from '../helpers/genres';
+import genresList from '../helpers/genresList'
+import scrollTo from '../helpers/scrollTo'
+import convertMinToHours from '../helpers/convertMinToHours'
+import sessionStorageActions from '../helpers/sessionStorageActions'
 
 import './Search.css'
+
+const date = new Date()
 
 class Search extends Component {
 
     state = {
-        genres,
         idsGenreSelected: [],
         namesGenreSelected: [],
-
-        moviesFound: [],
-
-        runTimeMax: 240,
         idMovie: undefined,
-        changeRoute: false,
+        runTimeMax: 240,
         yearMin: 1907,
-        yearMax: 2019,
+        yearMax: date.getFullYear(),
+        originalLanguage: '',
+        numPage: 1
+    }
+
+    componentDidMount = () => {
+        const newState = sessionStorageActions('get')
+        if (newState.numPage) {
+            this.setState({
+                idsGenreSelected: newState.idsGenreSelected,
+                yearMin: parseInt(newState.yearMin),
+                yearMax: parseInt(newState.yearMax),
+                runTimeMax: parseInt(newState.runTimeMax),
+                numPage: parseInt(newState.numPage),
+                namesGenreSelected: newState.idsGenreSelected.map(e => genresList[e])
+            })
+        }
     }
 
     seachMovies = () => {
-        const { runTimeMax, idsGenreSelected, yearMin, yearMax } = this.state
-        const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
-        fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${api_key}&language=fr-FR&sort_by=popularity.desc&primary_release_date.gte=${yearMin}-01-01&primary_release_date.lte=${yearMax}-12-31&with_genres=${idsGenreSelected}&with_runtime.lte=${runTimeMax}`)
-            .then(response => response.json())
-            .then(data => {
-                this.setState({
-                    moviesFound: data.results,
-                    redirect: true
-                })
-            })
+        const { idsGenreSelected, yearMin, yearMax, runTimeMax, numPage, originalLanguage } = this.state
+        sessionStorageActions('set', idsGenreSelected, yearMin, yearMax, runTimeMax, numPage)
+        this.props.searchMoviesWithQuerys(runTimeMax, idsGenreSelected, yearMin, yearMax, originalLanguage, numPage)
+        scrollTo("goResponse")
     }
 
     addOrRemoveGenre = (e, id, name) => {
@@ -56,28 +70,34 @@ class Search extends Component {
         }
     }
 
-    convertMinToHours = (min) => {
-        const h = Math.trunc(min / 60)
-        const m = Math.ceil((min / 60 - h) * 60)
-        if (m > 9) return h + 'h' + m
-        return h + 'h0' + m
-    }
-
-    changeRunTimeMax = (event) => {
+    handleChange = (e) => {
         this.setState({
-            runTimeMax: event.target.value
+            [e.target.name]: e.target.value
         })
     }
 
-    changeYearMin = (event) => {
-        this.setState({
-            yearMin: event.target.value
+    handleChangeNumPage = async (e) => {
+        await this.setState({
+            numPage: e.target.value
         })
+        this.searchWithNumPage(e)
     }
-    changeYearMax = (event) => {
-        this.setState({
-            yearMax: event.target.value
-        })
+
+    searchWithNumPage = async (e, sign) => {
+        e.preventDefault()
+        if (sign === '+1') {
+            await this.setState({
+                numPage: this.state.numPage + 1
+            })
+            sessionStorage.setItem('numPage', this.state.numPage)
+        } else {
+            await this.setState({
+                numPage: this.state.numPage - 1
+            })
+            sessionStorage.setItem('numPage', this.state.numPage)
+        }
+        const { runTimeMax, idsGenreSelected, yearMin, yearMax, originalLanguage, numPage } = this.state
+        this.props.searchMoviesWithQuerys(runTimeMax, idsGenreSelected, yearMin, yearMax, originalLanguage, numPage)
     }
 
     getIdMovie = (idMovie) => {
@@ -88,10 +108,12 @@ class Search extends Component {
 
 
     render() {
-        const { yearMax, yearMin, namesGenreSelected, runTimeMax } = this.state
+        const { yearMax, yearMin, namesGenreSelected, runTimeMax, numPage } = this.state
+        const { resultsMoviesFonded, numPagesTotal } = this.props
+        const pagesTotal = numPagesTotal < 1000 ? numPagesTotal : 1000
         return (
-            <div className='SearchComponent'>
-                <div className='Search' >
+            <div className='Search'>
+                <div className='SearchElements' >
                     <h2>Choisissez vos critères</h2>
                     <div className='displayButtons'>
                         <Link to='/'>
@@ -100,52 +122,55 @@ class Search extends Component {
                     </div>
                     <div className='paramsDisplay'>
                         <div className='listGenres'>
-                            {this.state.genres.map(e => {
+                            {genres.map(el => {
                                 return (
-                                    <div className='genre' key={e.name} onClick={event => this.addOrRemoveGenre(event, e.id, e.name)}>
-                                        {e.name}
+                                    <div className='genre' key={el.name} onClick={event => this.addOrRemoveGenre(event, el.id, el.name)}>
+                                        {el.name}
                                     </div>
                                 )
                             })}
                         </div>
                         <form>
-                            <input type="range" name="runtime" min="0" max="240" step='1' value={runTimeMax} onChange={e => this.changeRunTimeMax(e)} />
-                            Durée Max : {this.convertMinToHours(runTimeMax)}
-                            <input type="range" name="yearMin" min="1907" max={yearMax} step='1' value={yearMin} onChange={e => this.changeYearMin(e)} />
+                            <input type="range" name="runTimeMax" min="0" max="240" step='1' value={runTimeMax} onChange={this.handleChange} />
+                            Durée Max : {convertMinToHours(runTimeMax)}
+                            <input type="range" name="yearMin" min="1907" max={yearMax} step='1' value={yearMin} onChange={this.handleChange} />
                             Année Min : {yearMin}
-                            <input type="range" name="yearMax" min={yearMin} max="2019" step='1' value={yearMax} onChange={e => this.changeYearMax(e)} />
+                            <input type="range" name="yearMax" min={yearMin} max="2019" step='1' value={yearMax} onChange={this.handleChange} />
                             Année Max : {yearMax}
                         </form>
                     </div>
 
-                    <p>{`Films compris entre ${yearMin} et ${yearMax} dont la durée ne dépasse pas ${this.convertMinToHours(runTimeMax)}`}</p>
+                    <p>{`Films compris entre ${yearMin} et ${yearMax} dont la durée ne dépasse pas ${convertMinToHours(runTimeMax)}`}</p>
                     {namesGenreSelected.length ?
                         <p>Vous avez choisi : {`${namesGenreSelected}`}</p>
                         :
                         <p>Pas de genre selectionné</p>
                     }
                     <div className='displayButtons'>
-                        <a href='#response'><button onClick={this.seachMovies}>Lancer la rechercher</button></a>
-                        <button onClick={e => window.location.reload()}>Effacer tout</button>
+                        <button onClick={this.seachMovies}>Lancer la rechercher</button>
+                        <button onClick={_ => {
+                            window.location.reload()
+                            sessionStorage.clear()
+                        }}>Effacer tout</button>
                     </div>
                 </div>
-                <div id='response' className="response">
-                    {this.state.moviesFound
-                        .filter((_, i) => i < 15)
-                        .map((element, i) =>
-                            <Link to={`/movie${element.id}`} key={`movie-${i}`}>
-                                <ListMovies
-                                    movieDetails={element}
-                                    getIdMovie={this.getIdMovie}
-                                />
-                            </Link>
-                        )
-                    }
-
-                </div>
+                <Element name="goResponse">
+                    <ListMoviesBlock resultsMoviesFonded={resultsMoviesFonded} />
+                </Element>
+                {pagesTotal &&
+                    <div className='numPageDisplay'>
+                        {numPage > 1 && <button onClick={(e) => this.searchWithNumPage(e, '-1')}>{'<'}</button>}
+                        <p>{numPage}/{pagesTotal}</p>
+                        {numPage < pagesTotal && <button onClick={(e) => this.searchWithNumPage(e, '+1')}>{'>'} </button>}
+                    </div>}
             </div>
-
         )
     }
 }
-export default Search
+
+const mapStateToProps = state => ({
+    resultsMoviesFonded: state.LFParticularMovie.moviesFounded,
+    numPagesTotal: state.LFParticularMovie.numPagesTotal
+});
+
+export default connect(mapStateToProps, { searchMoviesWithQuerys })(Search);

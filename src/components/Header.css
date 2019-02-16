@@ -5,15 +5,15 @@
     position: relative;
 }
 
-.Header-logo{
-    animation: Header-logo-spin infinite 20s linear;
-    height: 90px;
+.Main-logo{
+    animation: Main-logo-spin infinite 20s linear;
+    height: 200px;
     z-index: 15;
     align-self: center;
 }
 
-.Header-logo:hover{
-    animation: Header-logo-spin infinite 2s linear;
+.Main-logo:hover{
+    animation: Main-logo-spin infinite 2s linear;
 }
 
 .Header h1{
@@ -43,17 +43,15 @@
     z-index: 5;
 }
 
-@media screen and (max-width: 480px){ 
-    .Header p{
-        font-size: calc(5px + 10vw);
-    }
-    .Header-logo {
-        height: calc(40px + 10vw);
-    }
-}
 @media screen and (max-width: 700px){
     .Header {
         height: 43vw;
+    }
+    .Main-logo {
+        height: calc(40px + 10vw);
+    }
+    .Header h1 {
+        font-size: 20px
     }
     .Header .randomHeaderStyle .filtreImage{
         height: 43vw;
@@ -64,7 +62,7 @@
     }
 } 
 
-@keyframes Header-logo-spin {
+@keyframes Main-logo-spin {
     from {
       transform: rotate(0deg);
     }

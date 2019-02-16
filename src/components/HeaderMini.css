@@ -1,0 +1,16 @@
+.HeaderMini {
+    background-color: #3a3d42;
+    height: 50px;
+    display: flex;
+    flex-direction: row
+}
+
+.HeaderMini h1 {
+    margin: 10px;
+    font-size: 26px
+}
+
+.Mini-logo{
+    height: 50px;
+}
+

@@ -1,21 +1,30 @@
-.Search{
+.Search {
+    padding-bottom: 20px;
+    min-height: 100vh !important
+}
+
+.SearchElements{
     margin: -20px 10px;
     display: flex;
     flex-direction: column;
-    align-items: center    
+    align-items: center;    
 }
 
-
-.Search h2{
+.SearchElements h2{
     padding-top: 20px
 }
 
-.Search .displayButtons{
+.SearchElements .displayButtons{
     display: flex;
     flex-direction: row;
     text-align: center;
     justify-content: space-around;
     width: 90vw;
+}
+
+.displayButtons {
+    max-width: 600px ;
+    padding-bottom: 10px
 }
 .displayButtons button{
     margin: 10px
@@ -25,12 +34,19 @@
     display: flex;
 }
 
+.numPageDisplay {
+    display: flex;
+    justify-content:flex-end;
+    align-items: center;
+    padding: 10px
+}
 form {
     display: flex;
     flex-direction: column;
     align-items:center;
     padding: 10px
 }
+
 input {
     margin:8px;
 }
@@ -65,5 +81,3 @@ input {
         flex-direction: row
     }
 }
-
-
