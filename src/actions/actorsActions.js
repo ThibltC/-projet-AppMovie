@@ -1,6 +1,6 @@
 import { GET_ACTOR_INFO, GET_FILMOGRAPHY, GET_TVGRAPHY} from './types';
 
-const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
+const api_key = process.env.REACT_APP_API_KEY;
 
 export const getActorInfos = (id) => (dispatch) => {
     fetch(`https://api.themoviedb.org/3/person/${id}?api_key=${api_key}&language=fr-FR`)

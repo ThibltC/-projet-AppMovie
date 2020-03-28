@@ -1,6 +1,6 @@
 import { FETCH_MOVIE, FETCH_HEADER } from './types';
 
-const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
+const api_key = process.env.REACT_APP_API_KEY;
 
 export const getMoviesInHome = (query) => (dispatch) => { 
   fetch(`https://api.themoviedb.org/3/search/movie?api_key=${api_key}&query=${query}&page=1&region=FR&language=fr-FR`)

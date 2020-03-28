@@ -25,7 +25,7 @@ class Header extends Component {
             <header className="Header">
                 <img src={logo} className="Main-logo" alt="logo" onClick={this.changeRandomMovie}/>
                 <h1>Donuts Movies</h1>
-                {/* {this.props.moviesIsLoaded &&
+                {this.props.moviesIsLoaded &&
                     <Link to={`/movie${randomMovie.id}`} >
                         <div className='randomHeaderStyle'>
                             <div className='filtreImage'/>
@@ -35,7 +35,7 @@ class Header extends Component {
                             <img src={`https://image.tmdb.org/t/p/original${randomMovie.poster_path}`} alt={randomMovie.title} />}            
                         </div>
                     </Link>
-                } */}
+                }
             </header>
         )
     }

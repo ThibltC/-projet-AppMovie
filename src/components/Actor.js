@@ -16,6 +16,9 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 import './Actor.css';
 
+const api_key = process.env.REACT_APP_API_KEY;
+
+
 const theme = createMuiTheme({
     palette: {
         primary: { main: grey[900] },
@@ -39,7 +42,6 @@ class Actor extends Component {
     };
 
     componentDidMount = () => {
-        const api_key = "91fe0a0af86fd4b9a59892545496d3b4"
         const { id } = this.props.match.params
         this.props.getActorInfos(id)
         this.props.getFilmography(id)
