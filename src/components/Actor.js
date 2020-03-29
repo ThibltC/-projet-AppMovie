@@ -6,13 +6,13 @@ import ListMovies from './ListMovies';
 import Loader from './LoaderPage';
 import HeaderMini from './HeaderMini';
 
-import { getActorInfos, getFilmography, getTvgraphy } from '../actions/actorsActions'
+import { getActorInfos, getFilmography, getTvgraphy } from '../actions/actorsActions';
 
 import grey from '@material-ui/core/colors/grey';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import './Actor.css';
 
@@ -67,6 +67,8 @@ class Actor extends Component {
     render() {
         const { value } = this.state;
         const { actorDetails, isLoadingFilmo, actorFilmo, actorTv } = this.props
+
+        console.log(actorDetails)
 
         if (!isLoadingFilmo) return (
             <Loader />

@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Element } from "react-scroll";
 
 import ListMovies from './ListMovies';
 import Header from './Header';
+import Button from './Tools/Button';
 
 import { getMoviesInHome } from '../actions/fetchActions'
 import { redirection } from '../actions/redirectionActions'
 import scrollTo from '../helpers/scrollTo'
 
 import './Home.css';
-
 
 
 class Home extends Component {
@@ -65,6 +66,13 @@ class Home extends Component {
                     <Link to='/search'>
                         <button >Recherche avancée</button>
                     </Link>
+                    <Link to='/actor'>
+                        <button >Rechercher un acteur</button>
+                    </Link>
+                    <Link to='/movie'>
+                        <button >Rechercher un film</button>
+                    </Link>
+
                 </div>
 
                 {(moviesAreLoaded && inputSearchMovieHome.length !== 0) &&
@@ -84,7 +92,7 @@ class Home extends Component {
                             }
                         </div>
                     </Element>
-                }              
+                }
             </div>
         )
     }

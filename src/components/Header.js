@@ -12,34 +12,31 @@ import './Header.css';
 class Header extends Component {
 
     componentDidMount = () => {
-        this.props.getMovieHeader()
-    }
+        this.props.getMovieHeader();
+    };
 
-    changeRandomMovie = () => {
-        this.props.getMovieHeader()
-    }
 
     render() {
-        const {randomMovie} = this.props
+        const { randomMovie, getMovieHeader, moviesIsLoaded } = this.props;
+
+        const bg_image = randomMovie && (randomMovie.backdrop_path ? randomMovie.backdrop_path : randomMovie.poster_path);
+
         return (
             <header className="Header">
-                <img src={logo} className="Main-logo" alt="logo" onClick={this.changeRandomMovie}/>
+                <img src={logo} className="Main-logo" alt="logo" onClick={getMovieHeader} />
                 <h1>Donuts Movies</h1>
-                {this.props.moviesIsLoaded &&
+                {moviesIsLoaded &&
                     <Link to={`/movie${randomMovie.id}`} >
                         <div className='randomHeaderStyle'>
-                            <div className='filtreImage'/>
-                            {randomMovie.backdrop_path ?
-                             <img src={`https://image.tmdb.org/t/p/original${randomMovie.backdrop_path}`} alt={randomMovie.title} />
-                            :
-                            <img src={`https://image.tmdb.org/t/p/original${randomMovie.poster_path}`} alt={randomMovie.title} />}            
+                            <div className='filtreImage' />
+                            <img src={`https://image.tmdb.org/t/p/original${bg_image}`} alt={randomMovie.title} />
                         </div>
                     </Link>
                 }
             </header>
-        )
-    }
-}
+        );
+    };
+};
 
 const mapStateToProps = state => ({
     randomMovie: state.fetchMovies.randomMovie,

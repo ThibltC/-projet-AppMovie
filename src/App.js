@@ -11,22 +11,20 @@ import NotFoundPage from './components/NotFoundPage'
 import './App.css';
 
 
-class App extends Component {
+const App = () => {
 
-  render() {
-    return (
-      <div className='App'>
-        <Switch>
-          <Route exact path='/' component={Home}/>
-          <Route exact path='/movie:id(\d+)' component={Movie}/>
-          <Route exact path='/actor:id(\d+)' component={Actor}/>
-          <Route exact path='/search' component={Search} />
-          <Route path='/(.*)' component={NotFoundPage} />
-        </Switch>
-        <Footer />
-      </div>
-    );
-  }
+  return (
+    <div className='App'>
+      <Switch>
+        <Route exact path='/' component={Home} />
+        <Route exact path='/movie:id(\d+)' component={Movie} />
+        <Route exact path='/actor:id(\d+)' component={Actor} />
+        <Route exact path='/search' component={Search} />
+        <Route component={NotFoundPage} />
+      </Switch>
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
