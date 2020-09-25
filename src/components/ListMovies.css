@@ -22,8 +22,6 @@
 }
 
 .ListMovies img:hover {
-    -ms-transform: scale(1.10); /* IE 9 */
-    -webkit-transform: scale(1.10); /* Safari 3-8 */
     transform: scale(1.10); 
 }
 

@@ -26,7 +26,7 @@ class Header extends Component {
                 <img src={logo} className="Main-logo" alt="logo" onClick={getMovieHeader} />
                 <h1>Donuts Movies</h1>
                 {moviesIsLoaded &&
-                    <Link to={`/movie${randomMovie.id}`} >
+                    <Link to={`/movie/${randomMovie.id}`} >
                         <div className='randomHeaderStyle'>
                             <div className='filtreImage' />
                             <img src={`https://image.tmdb.org/t/p/original${bg_image}`} alt={randomMovie.title} />

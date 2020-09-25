@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 
-const useStyles = {
+const useStyles = makeStyles(theme => ({
     button : {   
         border: '2px solid',
         font: 'inherit',
@@ -14,6 +14,6 @@ const useStyles = {
         backgroundColor: 'black',
         color: 'rgb(182, 179, 179)',
       } 
-};
+}))
 
 export default useStyles;
