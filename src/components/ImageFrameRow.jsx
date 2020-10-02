@@ -26,10 +26,10 @@ const ImageFrameRow = (props) => {
     useEffect(() => {
         fetch(url)
             .then(response => response.json())
-            .then(data => setImageFrameList(data.results))
+            .then(data => setImageFrameList(data.results));
     }, [url]);
 
-    
+
     return (
         <div className={classes.row}>
             {imageFrameList

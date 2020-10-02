@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import NotFoundPage from './components/NotFoundPage';
 import Header from './components/Header';
 import Snackbar from './components/Snackbar';
+import AppBar from './components/AppBar';
 
 import './App.css';
 import HeaderMini from './components/HeaderMini';
@@ -31,6 +32,7 @@ const App = () => {
     <CombinedContext.Provider value={[state, dispatch]} >
       <TranslationContext.Provider value={[t, setLocale, locale]} >
         <div className='App'>
+          <AppBar />
           {path === '/' ? <Header /> : <HeaderMini />}
           <Switch>
             <Route exact path='/' component={Home} />

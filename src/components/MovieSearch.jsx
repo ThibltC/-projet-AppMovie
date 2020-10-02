@@ -69,8 +69,6 @@ const MovieSearch = (props) => {
 
     return (
         <div className={classes.home_root}>
-            <HeaderMini />
-            <NowPlayingMovies {...props} />
             <Container className={classes.home_container}>
                 <input
                     className={classes.searchBar}

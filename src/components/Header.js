@@ -23,15 +23,17 @@ class Header extends Component {
 
         return (
             <header className="Header">
-                <img src={logo} className="Main-logo" alt="logo" onClick={getMovieHeader} />
-                <h1>Donuts Movies</h1>
+                {/* <img src={logo} className="Main-logo" alt="logo" onClick={getMovieHeader} /> */}
                 {moviesIsLoaded &&
-                    <Link to={`/movie/${randomMovie.id}`} >
-                        <div className='randomHeaderStyle'>
-                            <div className='filtreImage' />
-                            <img src={`https://image.tmdb.org/t/p/original${bg_image}`} alt={randomMovie.title} />
-                        </div>
-                    </Link>
+                    <>
+                        <h1>{randomMovie.title}</h1>
+                        <Link to={`/movie/${randomMovie.id}`} >
+                            <div className='randomHeaderStyle'>
+                                <div className='filtreImage' />
+                                <img src={`https://image.tmdb.org/t/p/original${bg_image}`} alt={randomMovie.title} />
+                            </div>
+                        </Link>
+                    </>
                 }
             </header>
         );

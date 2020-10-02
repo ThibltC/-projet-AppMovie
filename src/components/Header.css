@@ -1,4 +1,5 @@
 .Header{
+    padding-top : 65px;
     background-color: #282c34;
     height: 300px;
     display: flex;

@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import CombinedContext from '../contexts/combineContext';
 import TranslationContext from '../contexts/translationContext';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const borderShadow = 'inset 5px 5px 10px rgb(66, 66, 66), inset -5px -5px 10px rgb(66, 66, 66)';
 

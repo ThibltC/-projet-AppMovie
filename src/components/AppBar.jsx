@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom';
+import logo from '../pink_donut_-_2_-512.png';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,17 +28,18 @@ export default function ButtonAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" style={{backgroundColor: 'rgba(0,0,0,0)', boxShadow: 'none'}}>
+      <AppBar position="fixed" style={{ backgroundColor: 'rgba(0,0,0,0.5)', height: '65px' }}>
         <Toolbar  >
-          <Link to='/search'>
-                    <Typography >Recherche avancée</Typography>
-                </Link>
-                <Link to='/actor'>
-                    <Typography >Rechercher un acteur</Typography>
-                </Link>
-                <Link to='/movie'>
-                    <Typography >Rechercher un film</Typography>
-                </Link>
+          <Link to='/'>
+            <img src={logo} className="Mini-logo" alt="logo" />
+          </Link>
+          <h1>Donuts Movies</h1>
+          <Link to='/actor'>
+            <button >Rechercher un acteur</button>
+          </Link>
+          <Link to='/movie'>
+            <button >Rechercher un film</button>
+          </Link>
         </Toolbar>
       </AppBar>
     </div>
